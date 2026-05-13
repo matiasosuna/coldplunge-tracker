@@ -416,6 +416,19 @@ async def social_page(request: Request, db: Session = Depends(get_db)):
     })
 
 
+@app.get("/pay", response_class=HTMLResponse)
+async def pay_page(request: Request, db: Session = Depends(get_db)):
+    profile = get_or_create_profile(db)
+    donation_links = db.query(SocialLink).filter(
+        SocialLink.active == True,
+        SocialLink.is_donation == True,
+    ).order_by(SocialLink.order).all()
+    return tr(request, "pay.html", {
+        "profile": profile,
+        "donation_links": donation_links,
+    })
+
+
 # ---------------------------------------------------------------------------
 # Admin social panel
 # ---------------------------------------------------------------------------
@@ -462,6 +475,7 @@ async def admin_add_link(
     platform: str = Form(...),
     label: str = Form(...),
     url: str = Form(...),
+    is_donation: Optional[str] = Form(None),
     db: Session = Depends(get_db),
 ):
     if not get_current_user(request):
@@ -472,6 +486,7 @@ async def admin_add_link(
         label=label.strip(),
         url=url.strip(),
         order=max_order,
+        is_donation=is_donation is not None,
     )
     db.add(link)
     db.commit()

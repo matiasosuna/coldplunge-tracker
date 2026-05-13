@@ -61,11 +61,12 @@ class SocialProfile(Base):
 class SocialLink(Base):
     __tablename__ = "social_links"
     id = Column(Integer, primary_key=True)
-    platform = Column(String)   # "instagram", "tiktok", "whatsapp", "youtube", "custom"
+    platform = Column(String)   # "instagram", "tiktok", "whatsapp", "youtube", "custom", "donation"
     label = Column(String)
     url = Column(String)
     order = Column(Integer, default=0)
     active = Column(Boolean, default=True)
+    is_donation = Column(Boolean, default=False)
 
 
 class SocialPhoto(Base):
