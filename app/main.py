@@ -116,6 +116,27 @@ async def logout():
 # ---------------------------------------------------------------------------
 
 @app.get("/", response_class=HTMLResponse)
+async def home(request: Request, db: Session = Depends(get_db)):
+    if not get_current_user(request):
+        return auth_redirect()
+    today = date.today()
+    total_ingresos = db.query(func.sum(Transaction.amount)).filter(Transaction.type == "ingreso").scalar() or 0.0
+    total_gastos = db.query(func.sum(Transaction.amount)).filter(Transaction.type == "gasto").scalar() or 0.0
+    pendientes_count = db.query(TodoItem).filter(TodoItem.done == False).count()
+    proxima_sesion = db.query(IceSession).filter(IceSession.active == True, IceSession.date >= today).order_by(IceSession.date).first()
+    signups_count = db.query(SessionSignup).filter(SessionSignup.session_id == proxima_sesion.id).count() if proxima_sesion else 0
+    return tr(request, "home.html", {
+        "total_ingresos": total_ingresos,
+        "total_gastos": total_gastos,
+        "ganancia": total_ingresos - total_gastos,
+        "pendientes_count": pendientes_count,
+        "proxima_sesion": proxima_sesion,
+        "signups_count": signups_count,
+        "today": today,
+    })
+
+
+@app.get("/finanzas", response_class=HTMLResponse)
 async def dashboard(
     request: Request,
     month: Optional[int] = None,
@@ -168,7 +189,7 @@ async def dashboard(
             y -= 1
         months.append((y, m))
 
-    return tr(request, "dashboard.html", {
+    return tr(request, "finanzas.html", {
         "ingresos_mes": ingresos_mes,
         "gastos_mes": gastos_mes,
         "ganancia_mes": ganancia_mes,

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Inicio — Cold Plunge Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">❄️ Ice Bath Recovery Da Nang</h1>
+</div>
+
+<!-- Resumen rápido -->
+<div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem;">
+  <div class="card card-income">
+    <div class="card-label">Ingresos totales</div>
+    <div class="card-value">{{ "{:,.0f}".format(total_ingresos) }} ₫</div>
+  </div>
+  <div class="card card-expense">
+    <div class="card-label">Gastos totales</div>
+    <div class="card-value">{{ "{:,.0f}".format(total_gastos) }} ₫</div>
+  </div>
+  <div class="card {% if ganancia >= 0 %}card-profit{% else %}card-loss{% endif %}">
+    <div class="card-label">Ganancia neta</div>
+    <div class="card-value">{{ "{:,.0f}".format(ganancia) }} ₫</div>
+  </div>
+</div>
+
+<!-- Próxima sesión -->
+{% if proxima_sesion %}
+<div class="section" style="border-left: 4px solid var(--color-primary); margin-bottom: 1rem;">
+  <div class="section-header">
+    <h2 class="section-title">📅 Próxima sesión</h2>
+    <a href="/admin/sessions" class="btn btn-secondary btn-sm">Ver todas</a>
+  </div>
+  <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;">
+    <div>
+      <div style="font-size: 1.1rem; font-weight: 700;">{{ proxima_sesion.title }}</div>
+      <div style="color: var(--color-text-muted); font-size: 0.9rem;">
+        {{ proxima_sesion.date.strftime("%d/%m/%Y") }} a las {{ proxima_sesion.time }} — {{ proxima_sesion.location }}
+      </div>
+      <div style="margin-top: 0.4rem;">
+        <span style="color: var(--color-primary); font-weight: 600;">{{ signups_count }} / {{ proxima_sesion.max_spots }} anotados</span>
+      </div>
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <a href="/admin/sessions/{{ proxima_sesion.id }}/signups" class="btn btn-secondary btn-sm">Ver lista</a>
+      <a href="/sesion/{{ proxima_sesion.id }}" target="_blank" class="btn btn-primary btn-sm">Link público ↗</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if pendientes_count > 0 %}
+<div class="section" style="border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
+  <div class="section-header">
+    <h2 class="section-title">⚠️ Tenés {{ pendientes_count }} pendiente{% if pendientes_count != 1 %}s{% endif %}</h2>
+    <a href="/pendientes" class="btn btn-secondary btn-sm">Ver todos</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- Secciones de la app -->
+<h2 style="font-size: 1rem; color: var(--color-text-muted); margin-bottom: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">¿Qué querés hacer?</h2>
+
+<div class="home-grid">
+
+  <a href="/admin/sessions" class="home-card">
+    <div class="home-card-icon">🏖️</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Sesiones</div>
+      <div class="home-card-desc">Crear sesiones, compartir el link de inscripción y ver quién se anotó.</div>
+    </div>
+  </a>
+
+  <a href="/finanzas" class="home-card">
+    <div class="home-card-icon">💰</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Finanzas</div>
+      <div class="home-card-desc">Ver ingresos, gastos y ganancia del mes. Resumen financiero.</div>
+    </div>
+  </a>
+
+  <a href="/transacciones" class="home-card">
+    <div class="home-card-icon">📒</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Transacciones</div>
+      <div class="home-card-desc">Registrar ingresos y gastos: hielo, transporte, sesiones, equipamiento, etc.</div>
+    </div>
+  </a>
+
+  <a href="/ubicaciones" class="home-card">
+    <div class="home-card-icon">📍</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Ubicaciones</div>
+      <div class="home-card-desc">Gestionar los spots donde operan (My Khe, My An, etc.) y ver rentabilidad por ubicación.</div>
+    </div>
+  </a>
+
+  <a href="/admin/social" class="home-card">
+    <div class="home-card-icon">🌐</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Página Social</div>
+      <div class="home-card-desc">Editar la landing pública con redes sociales, fotos y botón de donación. Compartir con QR.</div>
+    </div>
+  </a>
+
+  <a href="/pay" target="_blank" class="home-card">
+    <div class="home-card-icon">💝</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Página de Pagos</div>
+      <div class="home-card-desc">Landing pública solo con opciones de pago (Wise, USDT, etc.). Ideal para QR de cobro.</div>
+    </div>
+  </a>
+
+  <a href="/pendientes" class="home-card">
+    <div class="home-card-icon">📋</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Pendientes</div>
+      <div class="home-card-desc">Lista de cosas para comprar, investigar o hacer. Con prioridades.</div>
+    </div>
+  </a>
+
+  <a href="/social" target="_blank" class="home-card">
+    <div class="home-card-icon">🔗</div>
+    <div class="home-card-body">
+      <div class="home-card-title">Ver landing pública</div>
+      <div class="home-card-desc">Así ve la gente la página cuando escanea el QR.</div>
+    </div>
+  </a>
+
+</div>
+{% endblock %}

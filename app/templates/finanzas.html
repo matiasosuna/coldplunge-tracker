@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}Finanzas — Cold Plunge Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Dashboard</h1>
+
+  <!-- Month selector -->
+  <form method="get" action="/" class="month-selector">
+    <select name="year" class="form-select-sm" onchange="this.form.submit()">
+      {% for y, m in months %}
+        {% if loop.changed(y) %}
+          <option value="{{ y }}" {% if y == sel_year %}selected{% endif %}>{{ y }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <select name="month" class="form-select-sm" onchange="this.form.submit()">
+      {% set month_names = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] %}
+      {% for y, m in months %}
+        <option value="{{ m }}" {% if m == sel_month and y == sel_year %}selected{% endif %}>
+          {{ month_names[m-1] }} {{ y }}
+        </option>
+      {% endfor %}
+    </select>
+    <noscript><button type="submit" class="btn btn-secondary btn-sm">Ir</button></noscript>
+  </form>
+</div>
+
+<!-- Summary cards -->
+<div class="cards-grid">
+  <div class="card card-income">
+    <div class="card-label">Ingresos del mes</div>
+    <div class="card-value">${{ "%.2f"|format(ingresos_mes) }}</div>
+  </div>
+  <div class="card card-expense">
+    <div class="card-label">Gastos del mes</div>
+    <div class="card-value">${{ "%.2f"|format(gastos_mes) }}</div>
+  </div>
+  <div class="card {% if ganancia_mes >= 0 %}card-profit{% else %}card-loss{% endif %}">
+    <div class="card-label">Ganancia neta del mes</div>
+    <div class="card-value">${{ "%.2f"|format(ganancia_mes) }}</div>
+  </div>
+  <div class="card card-total">
+    <div class="card-label">Total acumulado</div>
+    <div class="card-value">${{ "%.2f"|format(total_acumulado) }}</div>
+  </div>
+</div>
+
+<!-- Quick add transaction -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Agregar transacción</h2>
+  </div>
+  <form method="post" action="/transacciones/nueva" class="quick-form">
+    <input type="hidden" name="redirect_to" value="/" />
+    <div class="quick-form-grid">
+      <div class="form-group">
+        <label class="form-label">Fecha</label>
+        <input type="date" name="tx_date" class="form-input" value="{{ today.isoformat() }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select name="tipo" class="form-input" id="dash-tipo" onchange="updateCategories(this, 'dash-category')">
+          <option value="ingreso">Ingreso</option>
+          <option value="gasto">Gasto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select name="category" class="form-input" id="dash-category">
+          {% for cat in income_categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Monto ($)</label>
+        <input type="number" name="amount" class="form-input" step="0.01" min="0.01" placeholder="0.00" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ubicación</label>
+        <select name="location_id" class="form-input">
+          <option value="">Sin ubicación</option>
+          {% for loc in locations %}
+            <option value="{{ loc.id }}">{{ loc.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nota (opcional)</label>
+        <input type="text" name="note" class="form-input" placeholder="Descripción..." />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar transacción</button>
+  </form>
+</div>
+
+<!-- Recent transactions -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Últimas 10 transacciones</h2>
+    <a href="/transacciones" class="btn btn-secondary btn-sm">Ver todas</a>
+  </div>
+
+  {% if recent %}
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Categoría</th>
+          <th>Ubicación</th>
+          <th>Monto</th>
+          <th>Nota</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx in recent %}
+        <tr>
+          <td>{{ tx.date.strftime('%d/%m/%Y') }}</td>
+          <td>
+            <span class="badge {% if tx.type == 'ingreso' %}badge-income{% else %}badge-expense{% endif %}">
+              {{ tx.type|capitalize }}
+            </span>
+          </td>
+          <td>{{ tx.category }}</td>
+          <td>{{ tx.location.name if tx.location else '—' }}</td>
+          <td class="{% if tx.type == 'ingreso' %}text-income{% else %}text-expense{% endif %}">
+            {% if tx.type == 'gasto' %}-{% endif %}${{ "%.2f"|format(tx.amount) }}
+          </td>
+          <td class="text-muted">{{ tx.note or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-state">No hay transacciones registradas aún.</p>
+  {% endif %}
+</div>
+
+<script>
+const incomeCategories = {{ income_categories | tojson }};
+const expenseCategories = {{ expense_categories | tojson }};
+
+function updateCategories(tipoSelect, categoryId) {
+  const cats = tipoSelect.value === 'ingreso' ? incomeCategories : expenseCategories;
+  const catSelect = document.getElementById(categoryId);
+  catSelect.innerHTML = '';
+  cats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    catSelect.appendChild(opt);
+  });
+}
+</script>
+{% endblock %}
