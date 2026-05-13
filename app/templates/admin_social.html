@@ -5,178 +5,217 @@
 {% block content %}
 <div class="page-header">
   <h1 class="page-title">🌐 Página Social</h1>
-  <a href="/social" target="_blank" class="btn btn-secondary btn-sm">Ver página pública ↗</a>
+  <div style="display:flex;gap:0.5rem;">
+    <a href="/social" target="_blank" class="btn btn-secondary btn-sm">Ver /social ↗</a>
+    <a href="/pay" target="_blank" class="btn btn-secondary btn-sm">Ver /pay ↗</a>
+  </div>
 </div>
 
-<!-- Profile section -->
-<div class="section">
-  <div class="section-header">
-    <h2 class="section-title">Perfil</h2>
-  </div>
-  <form method="post" action="/admin/social/profile">
-    <div class="quick-form-grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="form-group">
-        <label class="form-label">Nombre del negocio</label>
-        <input type="text" name="business_name" class="form-input" value="{{ profile.business_name }}" required />
-      </div>
-      <div class="form-group" style="grid-column: 1 / -1;">
-        <label class="form-label">Tagline / descripción</label>
-        <textarea name="tagline" class="form-input" rows="4" placeholder="Ej: Da Nang's first mobile cold plunge...">{{ profile.tagline }}</textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">URL de imagen de perfil</label>
-        <input type="url" name="profile_image_url" class="form-input" value="{{ profile.profile_image_url }}" placeholder="https://..." />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Link de donación</label>
-        <input type="url" name="donation_link" class="form-input" value="{{ profile.donation_link }}" placeholder="https://cafecito.app/..." />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Etiqueta del botón de donación</label>
-        <input type="text" name="donation_label" class="form-input" value="{{ profile.donation_label }}" placeholder="Apoyanos" />
-      </div>
-    </div>
-    <div class="form-actions" style="margin-top: 0.75rem;">
-      <button type="submit" class="btn btn-primary">Guardar perfil</button>
-    </div>
-  </form>
-</div>
+<!-- Two-column layout: editor + preview -->
+<div class="social-admin-layout">
 
-<!-- Links section -->
-<div class="section">
-  <div class="section-header">
-    <h2 class="section-title">Links de redes sociales</h2>
-  </div>
+  <!-- LEFT: editor -->
+  <div class="social-admin-editor">
 
-  {% if links %}
-  <div class="table-wrapper" style="margin-bottom: 1.25rem;">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Plataforma</th>
-          <th>Etiqueta</th>
-          <th>URL</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for link in links %}
-        <tr>
-          <td>
-            {% if link.platform == "instagram" %}📸 Instagram
-            {% elif link.platform == "tiktok" %}🎵 TikTok
-            {% elif link.platform == "whatsapp" %}💬 WhatsApp
-            {% elif link.platform == "youtube" %}▶️ YouTube
-            {% else %}🔗 {{ link.platform | capitalize }}
-            {% endif %}
-          </td>
-          <td>{{ link.label }}</td>
-          <td><a href="{{ link.url }}" target="_blank" class="text-muted" style="font-size: 0.8rem;">{{ link.url[:50] }}{% if link.url | length > 50 %}…{% endif %}</a></td>
-          <td>
-            {% if link.active %}
-            <span class="badge badge-income">Activo</span>
-            {% else %}
-            <span class="badge badge-inactive">Inactivo</span>
-            {% endif %}
-          </td>
-          <td class="actions-cell">
-            <form method="post" action="/admin/social/links/{{ link.id }}/toggle" style="display:inline;">
-              <button type="submit" class="btn btn-ghost btn-sm">
-                {% if link.active %}Desactivar{% else %}Activar{% endif %}
-              </button>
-            </form>
-            <form method="post" action="/admin/social/links/{{ link.id }}/delete" style="display:inline;" onsubmit="return confirm('¿Eliminar este link?')">
-              <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% else %}
-  <p class="empty-state" style="padding: 1rem 0;">No hay links aún.</p>
-  {% endif %}
-
-  <!-- Add link form -->
-  <form method="post" action="/admin/social/links/add">
-    <div class="quick-form-grid" style="grid-template-columns: 1fr 1fr 2fr;">
-      <div class="form-group">
-        <label class="form-label">Plataforma</label>
-        <select name="platform" class="form-input" required>
-          <option value="instagram">Instagram</option>
-          <option value="tiktok">TikTok</option>
-          <option value="whatsapp">WhatsApp</option>
-          <option value="youtube">YouTube</option>
-          <option value="facebook">Facebook</option>
-          <option value="twitter">X / Twitter</option>
-          <option value="custom">Otro</option>
-        </select>
+    <!-- Profile -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Perfil</h2>
       </div>
-      <div class="form-group">
-        <label class="form-label">Etiqueta</label>
-        <input type="text" name="label" class="form-input" placeholder="Ej: Seguinos en Instagram" required />
-      </div>
-      <div class="form-group">
-        <label class="form-label">URL</label>
-        <input type="url" name="url" class="form-input" placeholder="https://..." required />
-      </div>
-    </div>
-    <div class="form-actions" style="margin-top: 0.75rem;">
-      <label class="form-check" style="margin-right: 1rem;">
-        <input type="checkbox" name="is_donation" class="form-checkbox" />
-        <span class="form-check-label">💝 Es botón de pago/donación</span>
-      </label>
-      <button type="submit" class="btn btn-primary">Agregar link</button>
-    </div>
-  </form>
-</div>
-
-<!-- Photos section -->
-<div class="section">
-  <div class="section-header">
-    <h2 class="section-title">Galería de fotos</h2>
-  </div>
-
-  {% if photos %}
-  <div class="admin-photo-grid" style="margin-bottom: 1.25rem;">
-    {% for photo in photos %}
-    <div class="admin-photo-card">
-      <img
-        src="{{ photo.image_url }}"
-        alt="{{ photo.caption or 'Foto' }}"
-        class="admin-photo-img"
-        onerror="this.style.opacity='0.3'"
-      />
-      {% if photo.caption %}
-      <p class="admin-photo-caption">{{ photo.caption }}</p>
-      {% endif %}
-      <form method="post" action="/admin/social/photos/{{ photo.id }}/delete" onsubmit="return confirm('¿Eliminar esta foto?')">
-        <button type="submit" class="btn btn-danger btn-sm btn-full" style="margin-top: 0.5rem;">Eliminar</button>
+      <form method="post" action="/admin/social/profile" onsubmit="reloadPreview()">
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label class="form-label">Nombre del negocio</label>
+          <input type="text" name="business_name" class="form-input" value="{{ profile.business_name }}" required />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label class="form-label">Descripción</label>
+          <textarea name="tagline" class="form-input" rows="3" placeholder="Da Nang's first mobile cold plunge...">{{ profile.tagline }}</textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label class="form-label">URL de imagen de perfil</label>
+          <input type="url" name="profile_image_url" class="form-input" value="{{ profile.profile_image_url }}" placeholder="https://..." />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Guardar perfil</button>
+        </div>
       </form>
     </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="empty-state" style="padding: 1rem 0;">No hay fotos aún.</p>
-  {% endif %}
 
-  <!-- Add photo form -->
-  <form method="post" action="/admin/social/photos/add">
-    <div class="quick-form-grid" style="grid-template-columns: 2fr 1fr;">
-      <div class="form-group">
-        <label class="form-label">URL de la imagen</label>
-        <input type="url" name="image_url" class="form-input" placeholder="https://..." required />
+    <!-- Social links -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Links sociales</h2>
       </div>
-      <div class="form-group">
-        <label class="form-label">Caption (opcional)</label>
-        <input type="text" name="caption" class="form-input" placeholder="Ej: Sesión grupal en Palermo" />
+
+      {% set social_links = links | selectattr("is_donation", "equalto", false) | list %}
+      {% if social_links %}
+      <div style="margin-bottom:1rem;">
+        {% for link in social_links %}
+        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--color-border);">
+          <span style="flex:1;font-size:0.9rem;">
+            {% if link.platform == "instagram" %}📸
+            {% elif link.platform == "tiktok" %}🎵
+            {% elif link.platform == "whatsapp" %}💬
+            {% elif link.platform == "youtube" %}▶️
+            {% elif link.platform == "facebook" %}👤
+            {% elif link.platform == "twitter" %}🐦
+            {% else %}🔗
+            {% endif %}
+            <strong>{{ link.label }}</strong>
+            {% if not link.active %}<span style="color:var(--color-text-muted);font-size:0.75rem;"> (inactivo)</span>{% endif %}
+          </span>
+          <form method="post" action="/admin/social/links/{{ link.id }}/toggle" style="display:inline;">
+            <button type="submit" class="btn btn-ghost btn-sm">{% if link.active %}⏸{% else %}▶{% endif %}</button>
+          </form>
+          <form method="post" action="/admin/social/links/{{ link.id }}/delete" style="display:inline;" onsubmit="return confirm('¿Eliminar?')">
+            <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+          </form>
+        </div>
+        {% endfor %}
       </div>
+      {% endif %}
+
+      <form method="post" action="/admin/social/links/add" onsubmit="reloadPreview()">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+          <div class="form-group">
+            <label class="form-label">Plataforma</label>
+            <select name="platform" class="form-input" required>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="youtube">YouTube</option>
+              <option value="facebook">Facebook</option>
+              <option value="twitter">X / Twitter</option>
+              <option value="custom">Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Etiqueta</label>
+            <input type="text" name="label" class="form-input" placeholder="Seguinos en Instagram" required />
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">URL</label>
+            <input type="url" name="url" class="form-input" placeholder="https://instagram.com/..." required />
+          </div>
+        </div>
+        <input type="hidden" name="is_donation" value="" />
+        <button type="submit" class="btn btn-primary btn-sm">+ Agregar link social</button>
+      </form>
     </div>
-    <div class="form-actions" style="margin-top: 0.75rem;">
-      <button type="submit" class="btn btn-primary">Agregar foto</button>
+
+    <!-- Payment links -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">💝 Links de pago / donación</h2>
+      </div>
+      <p style="font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem;">Estos aparecen como botones de pago en <code>/social</code> y <code>/pay</code>. Si hay más de uno, se muestran como menú desplegable.</p>
+
+      {% set donation_links = links | selectattr("is_donation", "equalto", true) | list %}
+      {% if donation_links %}
+      <div style="margin-bottom:1rem;">
+        {% for link in donation_links %}
+        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--color-border);">
+          <span style="flex:1;font-size:0.9rem;">💝 <strong>{{ link.label }}</strong>
+            {% if not link.active %}<span style="color:var(--color-text-muted);font-size:0.75rem;"> (inactivo)</span>{% endif %}
+          </span>
+          <form method="post" action="/admin/social/links/{{ link.id }}/toggle" style="display:inline;">
+            <button type="submit" class="btn btn-ghost btn-sm">{% if link.active %}⏸{% else %}▶{% endif %}</button>
+          </form>
+          <form method="post" action="/admin/social/links/{{ link.id }}/delete" style="display:inline;" onsubmit="return confirm('¿Eliminar?')">
+            <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:var(--color-text-muted);font-size:0.85rem;margin-bottom:1rem;">No hay links de pago aún.</p>
+      {% endif %}
+
+      <form method="post" action="/admin/social/links/add" onsubmit="reloadPreview()">
+        <input type="hidden" name="is_donation" value="on" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+          <div class="form-group">
+            <label class="form-label">Etiqueta</label>
+            <input type="text" name="label" class="form-input" placeholder="Wise, USDT, etc." required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">URL</label>
+            <input type="url" name="url" class="form-input" placeholder="https://wise.com/pay/..." required />
+          </div>
+        </div>
+        <input type="hidden" name="platform" value="custom" />
+        <button type="submit" class="btn btn-primary btn-sm">+ Agregar método de pago</button>
+      </form>
     </div>
-  </form>
+
+    <!-- Photos -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Galería de fotos</h2>
+      </div>
+
+      {% if photos %}
+      <div class="admin-photo-grid" style="margin-bottom:1rem;">
+        {% for photo in photos %}
+        <div class="admin-photo-card">
+          <img src="{{ photo.image_url }}" alt="{{ photo.caption or 'Foto' }}" class="admin-photo-img" onerror="this.style.opacity='0.3'" />
+          {% if photo.caption %}<p class="admin-photo-caption">{{ photo.caption }}</p>{% endif %}
+          <form method="post" action="/admin/social/photos/{{ photo.id }}/delete" onsubmit="return confirm('¿Eliminar?')">
+            <button type="submit" class="btn btn-danger btn-sm btn-full" style="margin-top:0.4rem;">Eliminar</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:var(--color-text-muted);font-size:0.85rem;margin-bottom:1rem;">No hay fotos aún.</p>
+      {% endif %}
+
+      <form method="post" action="/admin/social/photos/add" onsubmit="reloadPreview()">
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+          <div class="form-group">
+            <label class="form-label">URL de la imagen</label>
+            <input type="url" name="image_url" class="form-input" placeholder="https://..." required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Caption (opcional)</label>
+            <input type="text" name="caption" class="form-input" placeholder="Sesión grupal..." />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">+ Agregar foto</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: preview iframe -->
+  <div class="social-admin-preview">
+    <div class="social-preview-header">
+      <span style="font-size:0.8rem;color:var(--color-text-muted);">Vista previa — /social</span>
+      <button onclick="reloadPreview()" class="btn btn-ghost btn-sm">⟳ Actualizar</button>
+    </div>
+    <div class="social-preview-frame-wrapper">
+      <iframe id="socialPreview" src="/social" class="social-preview-frame"></iframe>
+    </div>
+  </div>
+
 </div>
+
+<script>
+  function scalePreview() {
+    const wrapper = document.querySelector('.social-preview-frame-wrapper');
+    const iframe = document.getElementById('socialPreview');
+    if (!wrapper || !iframe) return;
+    const scale = wrapper.clientWidth / 375;
+    iframe.style.transform = `scale(${scale})`;
+    wrapper.style.height = (812 * scale) + 'px';
+  }
+  function reloadPreview() {
+    setTimeout(() => {
+      const iframe = document.getElementById('socialPreview');
+      iframe.src = '/social';
+    }, 600);
+  }
+  window.addEventListener('load', scalePreview);
+  window.addEventListener('resize', scalePreview);
+</script>
 {% endblock %}

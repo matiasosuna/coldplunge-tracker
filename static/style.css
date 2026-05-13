@@ -1087,3 +1087,58 @@ body {
   color: var(--color-text-muted);
   line-height: 1.4;
 }
+
+/* ===== SOCIAL ADMIN LAYOUT ===== */
+.social-admin-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .social-admin-layout {
+    grid-template-columns: 1fr 380px;
+    align-items: start;
+  }
+  .main-content {
+    max-width: 1200px;
+  }
+}
+
+.social-admin-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.social-admin-preview {
+  position: sticky;
+  top: 70px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.social-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.social-preview-frame-wrapper {
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+}
+
+.social-preview-frame {
+  width: 375px;
+  height: 812px;
+  border: none;
+  transform-origin: top left;
+  
+  pointer-events: none;
+}

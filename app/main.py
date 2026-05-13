@@ -493,8 +493,6 @@ async def admin_social_profile(
     business_name: str = Form(...),
     tagline: str = Form(""),
     profile_image_url: str = Form(""),
-    donation_link: str = Form(""),
-    donation_label: str = Form("Apoyanos"),
     db: Session = Depends(get_db),
 ):
     if not get_current_user(request):
@@ -503,8 +501,6 @@ async def admin_social_profile(
     profile.business_name = business_name.strip()
     profile.tagline = tagline.strip()
     profile.profile_image_url = profile_image_url.strip()
-    profile.donation_link = donation_link.strip()
-    profile.donation_label = donation_label.strip() or "Apoyanos"
     db.commit()
     return RedirectResponse(url="/admin/social", status_code=302)
 
