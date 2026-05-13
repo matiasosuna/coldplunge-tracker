@@ -32,7 +32,7 @@
     <!-- Links -->
     <section class="social-links-section">
       {% for link in links %}
-      <a href="{{ link.url }}" class="social-link-btn" target="_blank" rel="noopener noreferrer">
+      <a href="{{ link.url }}" class="social-link-btn platform-{{ link.platform }}" target="_blank" rel="noopener noreferrer">
         <span class="social-link-icon">
           {% if link.platform == "instagram" %}<i class="fa-brands fa-instagram"></i>
           {% elif link.platform == "tiktok" %}<i class="fa-brands fa-tiktok"></i>
@@ -79,10 +79,31 @@
     {% endif %}
 
     <footer class="social-footer">
+      <button class="social-share-btn" onclick="sharePage()">
+        <i class="fa-solid fa-share-nodes"></i> Compartir
+      </button>
       <p>❄️ {{ profile.business_name }}</p>
     </footer>
 
   </div>
+
+  <script>
+    function sharePage() {
+      if (navigator.share) {
+        navigator.share({
+          title: '{{ profile.business_name }}',
+          text: '{{ profile.tagline }}',
+          url: window.location.href,
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          const btn = document.querySelector('.social-share-btn');
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Link copiado';
+          setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> Compartir', 2000);
+        });
+      }
+    }
+  </script>
 
 </body>
 </html>
