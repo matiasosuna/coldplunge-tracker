@@ -14,7 +14,7 @@ from sqlalchemy import func, extract
 
 from app.database import engine, get_db
 from app import models
-from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto
+from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto, TodoItem
 from app.auth import (
     verify_password, create_session_token, get_current_user,
     COOKIE_NAME, REMEMBER_ME_DAYS
@@ -541,3 +541,88 @@ async def admin_delete_photo(
         db.delete(photo)
         db.commit()
     return RedirectResponse(url="/admin/social", status_code=302)
+
+
+# ---------------------------------------------------------------------------
+# Pendientes (Todo)
+# ---------------------------------------------------------------------------
+
+TODO_CATEGORIES = ["comprar", "investigar", "hacer"]
+TODO_PRIORITIES = ["alta", "normal", "baja"]
+
+@app.get("/pendientes", response_class=HTMLResponse)
+async def pendientes_page(
+    request: Request,
+    categoria: Optional[str] = None,
+    estado: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    query = db.query(TodoItem)
+    if categoria:
+        query = query.filter(TodoItem.category == categoria)
+    if estado == "pendiente":
+        query = query.filter(TodoItem.done == False)
+    elif estado == "hecho":
+        query = query.filter(TodoItem.done == True)
+    items = query.order_by(TodoItem.done.asc(), TodoItem.created_at.desc()).all()
+    return tr(request, "pendientes.html", {
+        "items": items,
+        "categoria": categoria or "",
+        "estado": estado or "",
+        "todo_categories": TODO_CATEGORIES,
+        "todo_priorities": TODO_PRIORITIES,
+    })
+
+
+@app.post("/pendientes/nuevo")
+async def nuevo_pendiente(
+    request: Request,
+    title: str = Form(...),
+    category: str = Form("hacer"),
+    priority: str = Form("normal"),
+    note: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    item = TodoItem(
+        title=title.strip(),
+        category=category,
+        priority=priority,
+        note=note.strip() if note else None,
+    )
+    db.add(item)
+    db.commit()
+    return RedirectResponse(url="/pendientes", status_code=302)
+
+
+@app.post("/pendientes/{item_id}/toggle")
+async def toggle_pendiente(
+    request: Request,
+    item_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    item = db.query(TodoItem).filter(TodoItem.id == item_id).first()
+    if item:
+        item.done = not item.done
+        db.commit()
+    return RedirectResponse(url="/pendientes", status_code=302)
+
+
+@app.post("/pendientes/{item_id}/delete")
+async def delete_pendiente(
+    request: Request,
+    item_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    item = db.query(TodoItem).filter(TodoItem.id == item_id).first()
+    if item:
+        db.delete(item)
+        db.commit()
+    return RedirectResponse(url="/pendientes", status_code=302)

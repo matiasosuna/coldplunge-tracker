@@ -74,3 +74,14 @@ class SocialPhoto(Base):
     image_url = Column(String)
     caption = Column(String, default="")
     order = Column(Integer, default=0)
+
+
+class TodoItem(Base):
+    __tablename__ = "todo_items"
+    id = Column(Integer, primary_key=True)
+    title = Column(String(500), nullable=False)
+    category = Column(String(50), nullable=False, default="hacer")  # comprar / investigar / hacer
+    priority = Column(String(20), nullable=False, default="normal")  # alta / normal / baja
+    done = Column(Boolean, default=False)
+    note = Column(String(1000), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)

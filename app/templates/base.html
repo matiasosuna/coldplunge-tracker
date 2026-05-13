@@ -17,6 +17,7 @@
       <a href="/transacciones" class="nav-link {% if request.url.path.startswith('/transacciones') %}active{% endif %}">Transacciones</a>
       <a href="/ubicaciones" class="nav-link {% if request.url.path.startswith('/ubicaciones') %}active{% endif %}">Ubicaciones</a>
       <a href="/admin/social" class="nav-link {% if request.url.path.startswith('/admin/social') %}active{% endif %}">Social</a>
+      <a href="/pendientes" class="nav-link {% if request.url.path.startswith('/pendientes') %}active{% endif %}">Pendientes</a>
       <form method="post" action="/logout" style="display:inline;">
         <button type="submit" class="btn-logout">Salir</button>
       </form>

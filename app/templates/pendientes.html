@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Pendientes — Cold Plunge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">📋 Pendientes</h1>
+</div>
+
+<!-- Add form -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Agregar pendiente</h2>
+  </div>
+  <form method="post" action="/pendientes/nuevo">
+    <div class="quick-form-grid">
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label class="form-label">Tarea *</label>
+        <input type="text" name="title" class="form-input" placeholder="Ej: Comprar bolsas de hielo extra" required autofocus />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select name="category" class="form-input">
+          {% for cat in todo_categories %}
+          <option value="{{ cat }}">{{ cat | capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prioridad</label>
+        <select name="priority" class="form-input">
+          {% for p in todo_priorities %}
+          <option value="{{ p }}">{{ p | capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label class="form-label">Nota (opcional)</label>
+        <input type="text" name="note" class="form-input" placeholder="Detalles adicionales..." />
+      </div>
+    </div>
+    <div class="form-actions" style="margin-top: 0.75rem;">
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Filters -->
+<div class="section">
+  <form method="get" action="/pendientes" class="filter-bar">
+    <select name="categoria" class="form-input form-input-sm" onchange="this.form.submit()">
+      <option value="">Todas las categorías</option>
+      {% for cat in todo_categories %}
+      <option value="{{ cat }}" {% if categoria == cat %}selected{% endif %}>{{ cat | capitalize }}</option>
+      {% endfor %}
+    </select>
+    <select name="estado" class="form-input form-input-sm" onchange="this.form.submit()">
+      <option value="">Todos</option>
+      <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendientes</option>
+      <option value="hecho" {% if estado == "hecho" %}selected{% endif %}>Hechos</option>
+    </select>
+    {% if categoria or estado %}
+    <a href="/pendientes" class="btn btn-secondary btn-sm">Limpiar</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- List -->
+<div class="section">
+  {% if items %}
+  <ul class="todo-list">
+    {% for item in items %}
+    <li class="todo-item {% if item.done %}todo-done{% endif %} priority-{{ item.priority }}">
+      <form method="post" action="/pendientes/{{ item.id }}/toggle" style="display:contents;">
+        <button type="submit" class="todo-check" title="Marcar como {% if item.done %}pendiente{% else %}hecho{% endif %}">
+          {% if item.done %}✅{% else %}⬜{% endif %}
+        </button>
+      </form>
+      <div class="todo-body">
+        <span class="todo-title">{{ item.title }}</span>
+        {% if item.note %}
+        <span class="todo-note">{{ item.note }}</span>
+        {% endif %}
+        <div class="todo-meta">
+          <span class="badge badge-{{ item.category }}">{{ item.category }}</span>
+          <span class="badge badge-priority-{{ item.priority }}">{{ item.priority }}</span>
+        </div>
+      </div>
+      <form method="post" action="/pendientes/{{ item.id }}/delete" style="display:contents;">
+        <button type="submit" class="btn-icon btn-danger-ghost" onclick="return confirm('¿Eliminar?')" title="Eliminar">🗑</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty-state">No hay pendientes. ¡Todo al día! 🎉</p>
+  {% endif %}
+</div>
+{% endblock %}
