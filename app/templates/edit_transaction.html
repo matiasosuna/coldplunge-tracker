@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Editar transacción — Cold Plunge Tracker{% endblock %}
+{% block title %}Edit transaction — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">Editar transacción</h1>
+  <h1 class="page-title">Edit transaction</h1>
 </div>
 
 <div class="section">
   <form method="post" action="/transacciones/{{ tx.id }}/editar" class="quick-form">
     <div class="quick-form-grid">
       <div class="form-group">
-        <label class="form-label">Fecha</label>
+        <label class="form-label">Date</label>
         <input type="date" name="tx_date" class="form-input" value="{{ tx.date.isoformat() }}" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo</label>
+        <label class="form-label">Type</label>
         <select name="tipo" class="form-input" id="edit-tipo" onchange="updateCategories(this, 'edit-category')">
-          <option value="ingreso" {% if tx.type == 'ingreso' %}selected{% endif %}>Ingreso</option>
-          <option value="gasto" {% if tx.type == 'gasto' %}selected{% endif %}>Gasto</option>
+          <option value="ingreso" {% if tx.type == 'ingreso' %}selected{% endif %}>Income</option>
+          <option value="gasto" {% if tx.type == 'gasto' %}selected{% endif %}>Expense</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Categoría</label>
+        <label class="form-label">Category</label>
         <select name="category" class="form-input" id="edit-category">
           {% for cat in income_categories %}
             <option value="{{ cat }}" {% if tx.category == cat %}selected{% endif %}>{{ cat }}</option>
@@ -32,27 +32,27 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Monto ($)</label>
+        <label class="form-label">Amount ($)</label>
         <input type="number" name="amount" class="form-input" step="0.01" min="0.01"
                value="{{ "%.2f"|format(tx.amount) }}" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Ubicación</label>
+        <label class="form-label">Location</label>
         <select name="location_id" class="form-input">
-          <option value="">Sin ubicación</option>
+          <option value="">No location</option>
           {% for loc in locations %}
             <option value="{{ loc.id }}" {% if tx.location_id == loc.id %}selected{% endif %}>{{ loc.name }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Nota</label>
-        <input type="text" name="note" class="form-input" value="{{ tx.note or '' }}" placeholder="Descripción opcional..." />
+        <label class="form-label">Note</label>
+        <input type="text" name="note" class="form-input" value="{{ tx.note or '' }}" placeholder="Optional description..." />
       </div>
     </div>
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Guardar cambios</button>
-      <a href="/transacciones" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Save changes</button>
+      <a href="/transacciones" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
 </div>

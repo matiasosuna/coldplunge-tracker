@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,15 +13,15 @@
       <span class="nav-title">Cold Plunge</span>
     </div>
     <div class="nav-links">
-      <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">Inicio</a>
-      <a href="/finanzas" class="nav-link {% if request.url.path == '/finanzas' %}active{% endif %}">Finanzas</a>
-      <a href="/transacciones" class="nav-link {% if request.url.path.startswith('/transacciones') %}active{% endif %}">Transacciones</a>
-      <a href="/ubicaciones" class="nav-link {% if request.url.path.startswith('/ubicaciones') %}active{% endif %}">Ubicaciones</a>
+      <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">Home</a>
+      <a href="/finanzas" class="nav-link {% if request.url.path == '/finanzas' %}active{% endif %}">Finances</a>
+      <a href="/transacciones" class="nav-link {% if request.url.path.startswith('/transacciones') %}active{% endif %}">Transactions</a>
+      <a href="/ubicaciones" class="nav-link {% if request.url.path.startswith('/ubicaciones') %}active{% endif %}">Locations</a>
       <a href="/admin/social" class="nav-link {% if request.url.path.startswith('/admin/social') %}active{% endif %}">Social</a>
-      <a href="/pendientes" class="nav-link {% if request.url.path.startswith('/pendientes') %}active{% endif %}">Pendientes</a>
-      <a href="/admin/sessions" class="nav-link {% if request.url.path.startswith('/admin/sessions') %}active{% endif %}">Sesiones</a>
+      <a href="/pendientes" class="nav-link {% if request.url.path.startswith('/pendientes') %}active{% endif %}">Tasks</a>
+      <a href="/admin/sessions" class="nav-link {% if request.url.path.startswith('/admin/sessions') %}active{% endif %}">Sessions</a>
       <form method="post" action="/logout" style="display:inline;">
-        <button type="submit" class="btn-logout">Salir</button>
+        <button type="submit" class="btn-logout">Logout</button>
       </form>
     </div>
   </nav>

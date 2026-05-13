@@ -1,47 +1,47 @@
 {% extends "base.html" %}
-{% block title %}Inicio — Cold Plunge Tracker{% endblock %}
+{% block title %}Home — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
 <div class="page-header">
   <h1 class="page-title">❄️ Ice Bath Recovery Da Nang</h1>
 </div>
 
-<!-- Resumen rápido -->
+<!-- Quick summary -->
 <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem;">
   <div class="card card-income">
-    <div class="card-label">Ingresos totales</div>
+    <div class="card-label">Total income</div>
     <div class="card-value">{{ "{:,.0f}".format(total_ingresos) }} ₫</div>
   </div>
   <div class="card card-expense">
-    <div class="card-label">Gastos totales</div>
+    <div class="card-label">Total expenses</div>
     <div class="card-value">{{ "{:,.0f}".format(total_gastos) }} ₫</div>
   </div>
   <div class="card {% if ganancia >= 0 %}card-profit{% else %}card-loss{% endif %}">
-    <div class="card-label">Ganancia neta</div>
+    <div class="card-label">Net profit</div>
     <div class="card-value">{{ "{:,.0f}".format(ganancia) }} ₫</div>
   </div>
 </div>
 
-<!-- Próxima sesión -->
+<!-- Upcoming session -->
 {% if proxima_sesion %}
 <div class="section" style="border-left: 4px solid var(--color-primary); margin-bottom: 1rem;">
   <div class="section-header">
-    <h2 class="section-title">📅 Próxima sesión</h2>
-    <a href="/admin/sessions" class="btn btn-secondary btn-sm">Ver todas</a>
+    <h2 class="section-title">📅 Upcoming session</h2>
+    <a href="/admin/sessions" class="btn btn-secondary btn-sm">View all</a>
   </div>
   <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;">
     <div>
       <div style="font-size: 1.1rem; font-weight: 700;">{{ proxima_sesion.title }}</div>
       <div style="color: var(--color-text-muted); font-size: 0.9rem;">
-        {{ proxima_sesion.date.strftime("%d/%m/%Y") }} a las {{ proxima_sesion.time }} — {{ proxima_sesion.location }}
+        {{ proxima_sesion.date.strftime("%d/%m/%Y") }} at {{ proxima_sesion.time }} — {{ proxima_sesion.location }}
       </div>
       <div style="margin-top: 0.4rem;">
-        <span style="color: var(--color-primary); font-weight: 600;">{{ signups_count }} / {{ proxima_sesion.max_spots }} anotados</span>
+        <span style="color: var(--color-primary); font-weight: 600;">{{ signups_count }} / {{ proxima_sesion.max_spots }} signed up</span>
       </div>
     </div>
     <div style="margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      <a href="/admin/sessions/{{ proxima_sesion.id }}/signups" class="btn btn-secondary btn-sm">Ver lista</a>
-      <a href="/sesion/{{ proxima_sesion.id }}" target="_blank" class="btn btn-primary btn-sm">Link público ↗</a>
+      <a href="/admin/sessions/{{ proxima_sesion.id }}/signups" class="btn btn-secondary btn-sm">View list</a>
+      <a href="/sesion/{{ proxima_sesion.id }}" target="_blank" class="btn btn-primary btn-sm">Public link ↗</a>
     </div>
   </div>
 </div>
@@ -50,78 +50,78 @@
 {% if pendientes_count > 0 %}
 <div class="section" style="border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
   <div class="section-header">
-    <h2 class="section-title">⚠️ Tenés {{ pendientes_count }} pendiente{% if pendientes_count != 1 %}s{% endif %}</h2>
-    <a href="/pendientes" class="btn btn-secondary btn-sm">Ver todos</a>
+    <h2 class="section-title">⚠️ You have {{ pendientes_count }} pending task{% if pendientes_count != 1 %}s{% endif %}</h2>
+    <a href="/pendientes" class="btn btn-secondary btn-sm">View all</a>
   </div>
 </div>
 {% endif %}
 
-<!-- Secciones de la app -->
-<h2 style="font-size: 1rem; color: var(--color-text-muted); margin-bottom: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">¿Qué querés hacer?</h2>
+<!-- App sections -->
+<h2 style="font-size: 1rem; color: var(--color-text-muted); margin-bottom: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">What do you want to do?</h2>
 
 <div class="home-grid">
 
   <a href="/admin/sessions" class="home-card">
     <div class="home-card-icon">🏖️</div>
     <div class="home-card-body">
-      <div class="home-card-title">Sesiones</div>
-      <div class="home-card-desc">Crear sesiones, compartir el link de inscripción y ver quién se anotó.</div>
+      <div class="home-card-title">Sessions</div>
+      <div class="home-card-desc">Create sessions, share the sign-up link and see who signed up.</div>
     </div>
   </a>
 
   <a href="/finanzas" class="home-card">
     <div class="home-card-icon">💰</div>
     <div class="home-card-body">
-      <div class="home-card-title">Finanzas</div>
-      <div class="home-card-desc">Ver ingresos, gastos y ganancia del mes. Resumen financiero.</div>
+      <div class="home-card-title">Finances</div>
+      <div class="home-card-desc">View income, expenses and monthly profit. Financial summary.</div>
     </div>
   </a>
 
   <a href="/transacciones" class="home-card">
     <div class="home-card-icon">📒</div>
     <div class="home-card-body">
-      <div class="home-card-title">Transacciones</div>
-      <div class="home-card-desc">Registrar ingresos y gastos: hielo, transporte, sesiones, equipamiento, etc.</div>
+      <div class="home-card-title">Transactions</div>
+      <div class="home-card-desc">Record income and expenses: ice, transport, sessions, equipment, etc.</div>
     </div>
   </a>
 
   <a href="/ubicaciones" class="home-card">
     <div class="home-card-icon">📍</div>
     <div class="home-card-body">
-      <div class="home-card-title">Ubicaciones</div>
-      <div class="home-card-desc">Gestionar los spots donde operan (My Khe, My An, etc.) y ver rentabilidad por ubicación.</div>
+      <div class="home-card-title">Locations</div>
+      <div class="home-card-desc">Manage the spots where you operate (My Khe, My An, etc.) and see profitability per location.</div>
     </div>
   </a>
 
   <a href="/admin/social" class="home-card">
     <div class="home-card-icon">🌐</div>
     <div class="home-card-body">
-      <div class="home-card-title">Página Social</div>
-      <div class="home-card-desc">Editar la landing pública con redes sociales, fotos y botón de donación. Compartir con QR.</div>
+      <div class="home-card-title">Social Page</div>
+      <div class="home-card-desc">Edit the public landing page with social links, photos and donation button. Share via QR.</div>
     </div>
   </a>
 
   <a href="/pay" target="_blank" class="home-card">
     <div class="home-card-icon">💝</div>
     <div class="home-card-body">
-      <div class="home-card-title">Página de Pagos</div>
-      <div class="home-card-desc">Landing pública solo con opciones de pago (Wise, USDT, etc.). Ideal para QR de cobro.</div>
+      <div class="home-card-title">Payments Page</div>
+      <div class="home-card-desc">Public landing with payment options only (Wise, USDT, etc.). Ideal for QR payments.</div>
     </div>
   </a>
 
   <a href="/pendientes" class="home-card">
     <div class="home-card-icon">📋</div>
     <div class="home-card-body">
-      <div class="home-card-title">Pendientes</div>
-      <div class="home-card-desc">Lista de cosas para comprar, investigar o hacer. Con prioridades.</div>
+      <div class="home-card-title">Tasks</div>
+      <div class="home-card-desc">List of things to buy, research or do. With priorities.</div>
     </div>
   </a>
 
   <a href="/social" target="_blank" class="home-card">
     <div class="home-card-icon">🔗</div>
     <div class="home-card-body">
-      <div class="home-card-title">Ver landing pública</div>
-      <div class="home-card-desc">Así ve la gente la página cuando escanea el QR.</div>
+      <div class="home-card-title">View public landing</div>
+      <div class="home-card-desc">This is what people see when they scan the QR code.</div>
     </div>
   </a>
 

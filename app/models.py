@@ -39,8 +39,8 @@ class Transaction(Base):
 
 
 # Hard-coded categories
-INCOME_CATEGORIES = ["Sesión", "Evento", "Otro ingreso"]
-EXPENSE_CATEGORIES = ["Hielo", "Agua", "Transporte", "Equipamiento", "Mantenimiento", "Marketing", "Otro gasto"]
+INCOME_CATEGORIES = ["Session", "Event", "Other income"]
+EXPENSE_CATEGORIES = ["Ice", "Water", "Transport", "Equipment", "Maintenance", "Marketing", "Other expense"]
 ALL_CATEGORIES = INCOME_CATEGORIES + EXPENSE_CATEGORIES
 
 
@@ -81,8 +81,8 @@ class TodoItem(Base):
     __tablename__ = "todo_items"
     id = Column(Integer, primary_key=True)
     title = Column(String(500), nullable=False)
-    category = Column(String(50), nullable=False, default="hacer")  # comprar / investigar / hacer
-    priority = Column(String(20), nullable=False, default="normal")  # alta / normal / baja
+    category = Column(String(50), nullable=False, default="do")  # buy / research / do
+    priority = Column(String(20), nullable=False, default="normal")  # high / normal / low
     done = Column(Boolean, default=False)
     note = Column(String(1000), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)

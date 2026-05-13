@@ -1,31 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Transacciones — Cold Plunge Tracker{% endblock %}
+{% block title %}Transactions — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">Transacciones</h1>
-  <button class="btn btn-primary" onclick="toggleForm('add-form')">+ Nueva</button>
+  <h1 class="page-title">Transactions</h1>
+  <button class="btn btn-primary" onclick="toggleForm('add-form')">+ New</button>
 </div>
 
 <!-- Add transaction form (hidden by default) -->
 <div id="add-form" class="section collapsible" style="display:none;">
-  <h2 class="section-title">Nueva transacción</h2>
+  <h2 class="section-title">New transaction</h2>
   <form method="post" action="/transacciones/nueva" class="quick-form">
     <input type="hidden" name="redirect_to" value="/transacciones" />
     <div class="quick-form-grid">
       <div class="form-group">
-        <label class="form-label">Fecha</label>
+        <label class="form-label">Date</label>
         <input type="date" name="tx_date" class="form-input" value="{{ today.isoformat() }}" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo</label>
+        <label class="form-label">Type</label>
         <select name="tipo" class="form-input" id="tx-tipo" onchange="updateCategories(this, 'tx-category')">
-          <option value="ingreso">Ingreso</option>
-          <option value="gasto">Gasto</option>
+          <option value="ingreso">Income</option>
+          <option value="gasto">Expense</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Categoría</label>
+        <label class="form-label">Category</label>
         <select name="category" class="form-input" id="tx-category">
           {% for cat in income_categories %}
             <option value="{{ cat }}">{{ cat }}</option>
@@ -33,26 +33,26 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Monto ($)</label>
+        <label class="form-label">Amount ($)</label>
         <input type="number" name="amount" class="form-input" step="0.01" min="0.01" placeholder="0.00" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Ubicación</label>
+        <label class="form-label">Location</label>
         <select name="location_id" class="form-input">
-          <option value="">Sin ubicación</option>
+          <option value="">No location</option>
           {% for loc in active_locations %}
             <option value="{{ loc.id }}">{{ loc.name }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Nota</label>
-        <input type="text" name="note" class="form-input" placeholder="Descripción opcional..." />
+        <label class="form-label">Note</label>
+        <input type="text" name="note" class="form-input" placeholder="Optional description..." />
       </div>
     </div>
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Guardar</button>
-      <button type="button" class="btn btn-secondary" onclick="toggleForm('add-form')">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" onclick="toggleForm('add-form')">Cancel</button>
     </div>
   </form>
 </div>
@@ -62,46 +62,46 @@
   <form method="get" action="/transacciones" class="filter-form">
     <div class="filter-grid">
       <div class="form-group">
-        <label class="form-label">Mes</label>
+        <label class="form-label">Month</label>
         <select name="month" class="form-input">
-          <option value="">Todos</option>
-          {% set month_names = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] %}
+          <option value="">All</option>
+          {% set month_names = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
           {% for i in range(1, 13) %}
             <option value="{{ i }}" {% if sel_month == i %}selected{% endif %}>{{ month_names[i-1] }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Año</label>
+        <label class="form-label">Year</label>
         <input type="number" name="year" class="form-input" value="{{ sel_year }}" min="2020" max="2099" />
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo</label>
+        <label class="form-label">Type</label>
         <select name="tipo" class="form-input">
-          <option value="">Todos</option>
-          <option value="ingreso" {% if sel_tipo == 'ingreso' %}selected{% endif %}>Ingresos</option>
-          <option value="gasto" {% if sel_tipo == 'gasto' %}selected{% endif %}>Gastos</option>
+          <option value="">All</option>
+          <option value="ingreso" {% if sel_tipo == 'ingreso' %}selected{% endif %}>Income</option>
+          <option value="gasto" {% if sel_tipo == 'gasto' %}selected{% endif %}>Expenses</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Ubicación</label>
+        <label class="form-label">Location</label>
         <select name="location_id" class="form-input">
-          <option value="">Todas</option>
+          <option value="">All</option>
           {% for loc in locations %}
             <option value="{{ loc.id }}" {% if sel_location == loc.id %}selected{% endif %}>{{ loc.name }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Categoría</label>
+        <label class="form-label">Category</label>
         <select name="category" class="form-input">
-          <option value="">Todas</option>
-          <optgroup label="Ingresos">
+          <option value="">All</option>
+          <optgroup label="Income">
             {% for cat in income_categories %}
               <option value="{{ cat }}" {% if sel_category == cat %}selected{% endif %}>{{ cat }}</option>
             {% endfor %}
           </optgroup>
-          <optgroup label="Gastos">
+          <optgroup label="Expenses">
             {% for cat in expense_categories %}
               <option value="{{ cat }}" {% if sel_category == cat %}selected{% endif %}>{{ cat }}</option>
             {% endfor %}
@@ -109,8 +109,8 @@
         </select>
       </div>
       <div class="form-group form-group-action">
-        <button type="submit" class="btn btn-secondary">Filtrar</button>
-        <a href="/transacciones" class="btn btn-ghost">Limpiar</a>
+        <button type="submit" class="btn btn-secondary">Filter</button>
+        <a href="/transacciones" class="btn btn-ghost">Clear</a>
       </div>
     </div>
   </form>
@@ -123,13 +123,13 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Fecha</th>
-          <th>Tipo</th>
-          <th>Categoría</th>
-          <th>Ubicación</th>
-          <th>Monto</th>
-          <th>Nota</th>
-          <th>Acciones</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Location</th>
+          <th>Amount</th>
+          <th>Note</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -148,10 +148,10 @@
           </td>
           <td class="text-muted">{{ tx.note or '—' }}</td>
           <td class="actions-cell">
-            <a href="/transacciones/{{ tx.id }}/editar" class="btn btn-ghost btn-sm">Editar</a>
+            <a href="/transacciones/{{ tx.id }}/editar" class="btn btn-ghost btn-sm">Edit</a>
             <form method="post" action="/transacciones/{{ tx.id }}/eliminar" style="display:inline;"
-                  onsubmit="return confirm('¿Eliminar esta transacción?')">
-              <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                  onsubmit="return confirm('Delete this transaction?')">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>
           </td>
         </tr>
@@ -159,9 +159,9 @@
       </tbody>
     </table>
   </div>
-  <p class="table-count">{{ transactions|length }} transacción(es)</p>
+  <p class="table-count">{{ transactions|length }} transaction(s)</p>
   {% else %}
-  <p class="empty-state">No hay transacciones con los filtros seleccionados.</p>
+  <p class="empty-state">No transactions found with the selected filters.</p>
   {% endif %}
 </div>
 

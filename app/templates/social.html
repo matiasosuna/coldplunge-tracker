@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,7 +59,7 @@
         <div class="donate-dropdown">
           <button class="social-link-btn social-donate-btn donate-toggle" onclick="toggleDonate()" type="button">
             <span class="social-link-icon"><i class="fa-solid fa-heart"></i></span>
-            <span class="social-link-label">Apoyanos</span>
+            <span class="social-link-label">Support us</span>
             <span class="donate-arrow"><i class="fa-solid fa-chevron-down"></i></span>
           </button>
           <div class="donate-menu" id="donateMenu">
@@ -76,13 +76,13 @@
     <!-- Photo gallery -->
     {% if photos %}
     <section class="social-gallery-section">
-      <h2 class="social-gallery-title">Galería</h2>
+      <h2 class="social-gallery-title">Gallery</h2>
       <div class="social-gallery-grid">
         {% for photo in photos %}
         <div class="social-photo-card">
           <img
             src="{{ photo.image_url }}"
-            alt="{{ photo.caption or 'Foto' }}"
+            alt="{{ photo.caption or 'Photo' }}"
             class="social-photo-img"
             loading="lazy"
             onerror="this.parentElement.style.display='none'"
@@ -98,7 +98,7 @@
 
     <footer class="social-footer">
       <button class="social-share-btn" onclick="sharePage()">
-        <i class="fa-solid fa-share-nodes"></i> Compartir
+        <i class="fa-solid fa-share-nodes"></i> Share
       </button>
       <p>❄️ {{ profile.business_name }}</p>
     </footer>
@@ -129,8 +129,8 @@
       } else {
         navigator.clipboard.writeText(window.location.href).then(() => {
           const btn = document.querySelector('.social-share-btn');
-          btn.innerHTML = '<i class="fa-solid fa-check"></i> Link copiado';
-          setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> Compartir', 2000);
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Link copied';
+          setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> Share', 2000);
         });
       }
     }

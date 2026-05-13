@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iniciar sesión — Cold Plunge Tracker</title>
+  <title>Log in — Cold Plunge Tracker</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body class="login-body">
@@ -11,7 +11,7 @@
     <div class="login-logo">
       <span class="login-icon">❄️</span>
       <h1 class="login-title">Cold Plunge</h1>
-      <p class="login-subtitle">Tracker de negocio</p>
+      <p class="login-subtitle">Business tracker</p>
     </div>
 
     {% if error %}
@@ -20,13 +20,13 @@
 
     <form method="post" action="/login" class="login-form">
       <div class="form-group">
-        <label for="password" class="form-label">Contraseña</label>
+        <label for="password" class="form-label">Password</label>
         <input
           type="password"
           id="password"
           name="password"
           class="form-input"
-          placeholder="Ingresa la contraseña"
+          placeholder="Enter password"
           autofocus
           required
         />
@@ -34,10 +34,10 @@
 
       <div class="form-group form-check">
         <input type="checkbox" id="recordarme" name="recordarme" value="1" class="form-checkbox" />
-        <label for="recordarme" class="form-check-label">Recordarme (30 días)</label>
+        <label for="recordarme" class="form-check-label">Remember me (30 days)</label>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+      <button type="submit" class="btn btn-primary btn-full">Log in</button>
     </form>
   </div>
 </body>

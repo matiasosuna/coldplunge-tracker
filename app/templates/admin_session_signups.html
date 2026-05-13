@@ -1,46 +1,46 @@
 {% extends "base.html" %}
 
-{% block title %}Anotados — {{ sess.title }}{% endblock %}
+{% block title %}Sign-ups — {{ sess.title }}{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">🧊 Anotados — {{ sess.title }}</h1>
-  <a href="/admin/sessions" class="btn btn-secondary btn-sm">← Volver a sesiones</a>
+  <h1 class="page-title">🧊 Sign-ups — {{ sess.title }}</h1>
+  <a href="/admin/sessions" class="btn btn-secondary btn-sm">← Back to sessions</a>
 </div>
 
 <!-- Session details -->
 <div class="section">
   <div class="section-header">
-    <h2 class="section-title">Detalles de la sesión</h2>
+    <h2 class="section-title">Session details</h2>
     {% if sess.active %}
-    <span class="badge badge-income">Activa</span>
+    <span class="badge badge-income">Active</span>
     {% else %}
-    <span class="badge badge-inactive">Inactiva</span>
+    <span class="badge badge-inactive">Inactive</span>
     {% endif %}
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;">
     <div class="stat-item">
-      <span class="stat-label">Fecha</span>
+      <span class="stat-label">Date</span>
       <span class="stat-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Hora</span>
+      <span class="stat-label">Time</span>
       <span class="stat-value">{{ sess.time }}</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Ubicación</span>
+      <span class="stat-label">Location</span>
       <span class="stat-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Precio</span>
+      <span class="stat-label">Price</span>
       <span class="stat-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Lugares</span>
+      <span class="stat-label">Spots</span>
       {% set signup_count = sess.signups | length %}
       {% set spots_remaining = sess.max_spots - signup_count %}
       {% if spots_remaining <= 0 %}
-      <span class="stat-value" style="color: var(--color-expense);">{{ signup_count }} / {{ sess.max_spots }} — Lleno</span>
+      <span class="stat-value" style="color: var(--color-expense);">{{ signup_count }} / {{ sess.max_spots }} — Full</span>
       {% elif spots_remaining <= 3 %}
       <span class="stat-value" style="color: #f59e0b;">{{ signup_count }} / {{ sess.max_spots }}</span>
       {% else %}
@@ -49,7 +49,7 @@
     </div>
     {% if sess.notes %}
     <div class="stat-item" style="grid-column: 1 / -1;">
-      <span class="stat-label">Notas</span>
+      <span class="stat-label">Notes</span>
       <span class="stat-value" style="font-size: 0.9rem; font-weight: 400; color: var(--color-text-muted);">{{ sess.notes }}</span>
     </div>
     {% endif %}
@@ -59,7 +59,7 @@
 <!-- Signups list -->
 <div class="section">
   <div class="section-header">
-    <h2 class="section-title">Personas anotadas</h2>
+    <h2 class="section-title">Signed-up attendees</h2>
   </div>
 
   {% if sess.signups %}
@@ -68,10 +68,10 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Nombre</th>
+          <th>Name</th>
           <th>WhatsApp</th>
-          <th>Fecha de registro</th>
-          <th>Acciones</th>
+          <th>Sign-up date</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -88,8 +88,8 @@
           </td>
           <td class="text-muted" style="font-size: 0.8rem;">{{ signup.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
           <td class="actions-cell">
-            <form method="post" action="/admin/sessions/{{ sess.id }}/signups/{{ signup.id }}/delete" onsubmit="return confirm('¿Cancelar el lugar de {{ signup.name }}?')">
-              <button type="submit" class="btn btn-danger btn-sm">Cancelar lugar</button>
+            <form method="post" action="/admin/sessions/{{ sess.id }}/signups/{{ signup.id }}/delete" onsubmit="return confirm('Cancel spot for {{ signup.name }}?')">
+              <button type="submit" class="btn btn-danger btn-sm">Cancel spot</button>
             </form>
           </td>
         </tr>
@@ -97,9 +97,9 @@
       </tbody>
     </table>
   </div>
-  <p class="table-count">{{ sess.signups | length }} persona{% if sess.signups | length != 1 %}s{% endif %} anotada{% if sess.signups | length != 1 %}s{% endif %}</p>
+  <p class="table-count">{{ sess.signups | length }} attendee{% if sess.signups | length != 1 %}s{% endif %} signed up</p>
   {% else %}
-  <p class="empty-state">Nadie se ha anotado aún.</p>
+  <p class="empty-state">Nobody has signed up yet.</p>
   {% endif %}
 </div>
 {% endblock %}

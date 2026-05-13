@@ -1,29 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Ubicaciones — Cold Plunge Tracker{% endblock %}
+{% block title %}Locations — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">Ubicaciones</h1>
-  <button class="btn btn-primary" onclick="toggleForm('add-location-form')">+ Nueva</button>
+  <h1 class="page-title">Locations</h1>
+  <button class="btn btn-primary" onclick="toggleForm('add-location-form')">+ New</button>
 </div>
 
 <!-- Add location form -->
 <div id="add-location-form" class="section collapsible" style="display:none;">
-  <h2 class="section-title">Nueva ubicación</h2>
+  <h2 class="section-title">New location</h2>
   <form method="post" action="/ubicaciones/nueva" class="quick-form">
     <div class="quick-form-grid">
       <div class="form-group">
-        <label class="form-label">Nombre *</label>
-        <input type="text" name="name" class="form-input" placeholder="Ej: Parque Central" required />
+        <label class="form-label">Name *</label>
+        <input type="text" name="name" class="form-input" placeholder="e.g. Central Park" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Dirección</label>
-        <input type="text" name="address" class="form-input" placeholder="Opcional..." />
+        <label class="form-label">Address</label>
+        <input type="text" name="address" class="form-input" placeholder="Optional..." />
       </div>
     </div>
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Guardar</button>
-      <button type="button" class="btn btn-secondary" onclick="toggleForm('add-location-form')">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" onclick="toggleForm('add-location-form')">Cancel</button>
     </div>
   </form>
 </div>
@@ -40,14 +40,14 @@
             <p class="location-address">{{ stat.location.address }}</p>
           {% endif %}
           {% if not stat.location.active %}
-            <span class="badge badge-inactive">Inactiva</span>
+            <span class="badge badge-inactive">Inactive</span>
           {% endif %}
         </div>
         <div class="location-actions">
-          <button class="btn btn-ghost btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Editar</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Edit</button>
           <form method="post" action="/ubicaciones/{{ stat.location.id }}/toggle" style="display:inline;">
             <button type="submit" class="btn btn-ghost btn-sm">
-              {% if stat.location.active %}Desactivar{% else %}Activar{% endif %}
+              {% if stat.location.active %}Deactivate{% else %}Activate{% endif %}
             </button>
           </form>
         </div>
@@ -55,15 +55,15 @@
 
       <div class="location-stats">
         <div class="stat-item">
-          <span class="stat-label">Ingresos</span>
+          <span class="stat-label">Income</span>
           <span class="stat-value text-income">${{ "%.2f"|format(stat.ingresos) }}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Gastos</span>
+          <span class="stat-label">Expenses</span>
           <span class="stat-value text-expense">${{ "%.2f"|format(stat.gastos) }}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Ganancia</span>
+          <span class="stat-label">Profit</span>
           <span class="stat-value {% if stat.ganancia >= 0 %}text-income{% else %}text-expense{% endif %}">
             ${{ "%.2f"|format(stat.ganancia) }}
           </span>
@@ -75,24 +75,24 @@
         <form method="post" action="/ubicaciones/{{ stat.location.id }}/editar">
           <div class="quick-form-grid">
             <div class="form-group">
-              <label class="form-label">Nombre</label>
+              <label class="form-label">Name</label>
               <input type="text" name="name" class="form-input" value="{{ stat.location.name }}" required />
             </div>
             <div class="form-group">
-              <label class="form-label">Dirección</label>
+              <label class="form-label">Address</label>
               <input type="text" name="address" class="form-input" value="{{ stat.location.address or '' }}" />
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Cancel</button>
           </div>
         </form>
       </div>
     </div>
     {% endfor %}
   {% else %}
-    <p class="empty-state">No hay ubicaciones registradas. Crea la primera arriba.</p>
+    <p class="empty-state">No locations registered. Create the first one above.</p>
   {% endif %}
 </div>
 

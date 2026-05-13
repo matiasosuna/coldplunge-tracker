@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cancelar lugar — {{ sess.title }}</title>
+  <title>Cancel spot — {{ sess.title }}</title>
   <link rel="stylesheet" href="/static/style.css" />
   <style>
     .cancel-body {
@@ -102,30 +102,30 @@
 
     <div class="cancel-header">
       <span class="cancel-icon">😔</span>
-      <h1 class="cancel-title">¿Cancelar tu lugar?</h1>
-      <p class="cancel-subtitle">Esta acción no se puede deshacer</p>
+      <h1 class="cancel-title">Cancel your spot?</h1>
+      <p class="cancel-subtitle">This action cannot be undone</p>
     </div>
 
     <div class="cancel-name-highlight">
-      <p>Lugar reservado por</p>
+      <p>Spot reserved by</p>
       <strong>{{ signup.name }}</strong>
     </div>
 
     <div class="cancel-detail-card">
       <div class="detail-row">
-        <span class="detail-label">Sesión</span>
+        <span class="detail-label">Session</span>
         <span class="detail-value">{{ sess.title }}</span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">Fecha</span>
+        <span class="detail-label">Date</span>
         <span class="detail-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">Hora</span>
+        <span class="detail-label">Time</span>
         <span class="detail-value">{{ sess.time }}</span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">Lugar</span>
+        <span class="detail-label">Location</span>
         <span class="detail-value">{{ sess.location }}</span>
       </div>
     </div>
@@ -133,10 +133,10 @@
     <div class="btn-row">
       <form method="post" action="/sesion/{{ sess.id }}/cancelar/{{ signup.cancel_token }}">
         <button type="submit" class="btn btn-danger btn-full" style="padding: 0.75rem; font-size: 1rem;">
-          Sí, cancelar mi lugar
+          Yes, cancel my spot
         </button>
       </form>
-      <a href="/sesion/{{ sess.id }}" class="back-link">← No, mantener mi lugar</a>
+      <a href="/sesion/{{ sess.id }}" class="back-link">← No, keep my spot</a>
     </div>
 
   </div>

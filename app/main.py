@@ -101,7 +101,7 @@ async def login_post(
             samesite="lax",
         )
         return response
-    return tr(request, "login.html", {"error": "Contraseña incorrecta"})
+    return tr(request, "login.html", {"error": "Incorrect password"})
 
 
 @app.post("/logout")
@@ -290,7 +290,7 @@ async def edit_transaction_page(
 
     tx = db.query(Transaction).filter(Transaction.id == tx_id).first()
     if not tx:
-        raise HTTPException(status_code=404, detail="Transacción no encontrada")
+        raise HTTPException(status_code=404, detail="Transaction not found")
 
     locations = get_active_locations(db)
     return tr(request, "edit_transaction.html", {"tx": tx, "locations": locations})
@@ -313,7 +313,7 @@ async def edit_transaction_post(
 
     tx = db.query(Transaction).filter(Transaction.id == tx_id).first()
     if not tx:
-        raise HTTPException(status_code=404, detail="Transacción no encontrada")
+        raise HTTPException(status_code=404, detail="Transaction not found")
 
     tx.date = date.fromisoformat(tx_date)
     tx.type = tipo
@@ -598,8 +598,8 @@ async def admin_delete_photo(
 # Pendientes (Todo)
 # ---------------------------------------------------------------------------
 
-TODO_CATEGORIES = ["comprar", "investigar", "hacer"]
-TODO_PRIORITIES = ["alta", "normal", "baja"]
+TODO_CATEGORIES = ["buy", "research", "do"]
+TODO_PRIORITIES = ["high", "normal", "low"]
 
 @app.get("/pendientes", response_class=HTMLResponse)
 async def pendientes_page(
@@ -631,7 +631,7 @@ async def pendientes_page(
 async def nuevo_pendiente(
     request: Request,
     title: str = Form(...),
-    category: str = Form("hacer"),
+    category: str = Form("do"),
     priority: str = Form("normal"),
     note: Optional[str] = Form(None),
     db: Session = Depends(get_db),
@@ -767,7 +767,7 @@ async def admin_session_signups(
         return auth_redirect()
     sess = db.query(IceSession).filter(IceSession.id == session_id).first()
     if not sess:
-        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+        raise HTTPException(status_code=404, detail="Session not found")
     return tr(request, "admin_session_signups.html", {"sess": sess})
 
 
@@ -796,7 +796,7 @@ async def admin_delete_signup(
 async def public_session_page(request: Request, session_id: int, db: Session = Depends(get_db)):
     sess = db.query(IceSession).filter(IceSession.id == session_id).first()
     if not sess:
-        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+        raise HTTPException(status_code=404, detail="Session not found")
     authenticated = check_session_auth(request, session_id)
     signup_count = len(sess.signups)
     spots_remaining = sess.max_spots - signup_count
@@ -820,7 +820,7 @@ async def public_session_auth(
 ):
     sess = db.query(IceSession).filter(IceSession.id == session_id).first()
     if not sess:
-        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+        raise HTTPException(status_code=404, detail="Session not found")
     if password == sess.access_password:
         response = RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
         response.set_cookie(
@@ -854,7 +854,7 @@ async def public_session_signup(
 ):
     sess = db.query(IceSession).filter(IceSession.id == session_id).first()
     if not sess:
-        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+        raise HTTPException(status_code=404, detail="Session not found")
     if not check_session_auth(request, session_id):
         return RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
     signup_count = len(sess.signups)

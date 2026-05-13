@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>¡Anotado! — {{ sess.title }}</title>
+  <title>Signed up! — {{ sess.title }}</title>
   <link rel="stylesheet" href="/static/style.css" />
   <style>
     .confirm-body {
@@ -140,47 +140,47 @@
 
     <div class="confirm-header">
       <span class="confirm-icon">🎉</span>
-      <h1 class="confirm-title">¡Estás anotado/a!</h1>
+      <h1 class="confirm-title">You're signed up!</h1>
       <p class="confirm-name">{{ signup.name }}</p>
     </div>
 
     <!-- Session details -->
     <div class="confirm-card">
       <div class="info-item">
-        <span class="info-label">📅 Fecha</span>
+        <span class="info-label">📅 Date</span>
         <span class="info-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">🕐 Hora</span>
+        <span class="info-label">🕐 Time</span>
         <span class="info-value">{{ sess.time }}</span>
       </div>
       <div class="info-item" style="grid-column: 1 / -1;">
-        <span class="info-label">📍 Lugar</span>
+        <span class="info-label">📍 Location</span>
         <span class="info-value">{{ sess.location }}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">💰 Precio</span>
+        <span class="info-label">💰 Price</span>
         <span class="info-value">{{ sess.price }}</span>
       </div>
     </div>
 
     <!-- Warning -->
     <div class="warning-box">
-      ⚠️ Guardá el link de abajo — es la <strong>única forma de cancelar</strong> tu lugar si no podés ir.
+      ⚠️ Save the link below — it's the <strong>only way to cancel</strong> your spot if you can't make it.
     </div>
 
     <!-- Cancel link -->
     <div class="cancel-card">
-      <h3>Tu link para cancelar</h3>
-      <p>Si no podés asistir, usá este link para liberar tu lugar:</p>
+      <h3>Your cancellation link</h3>
+      <p>If you can't make it, use this link to free up your spot:</p>
       <div class="cancel-url-box" id="cancel-url">{{ cancel_url }}</div>
       <button class="copy-btn" onclick="copyCancel()">
         <span id="copy-icon">📋</span>
-        <span id="copy-text">Copiar link de cancelación</span>
+        <span id="copy-text">Copy cancellation link</span>
       </button>
     </div>
 
-    <a href="/sesion/{{ sess.id }}" class="back-link">← Volver a la sesión</a>
+    <a href="/sesion/{{ sess.id }}" class="back-link">← Back to session</a>
   </div>
 
   <script>
@@ -188,10 +188,10 @@
       const url = document.getElementById('cancel-url').innerText.trim();
       navigator.clipboard.writeText(url).then(() => {
         document.getElementById('copy-icon').innerText = '✅';
-        document.getElementById('copy-text').innerText = '¡Link copiado!';
+        document.getElementById('copy-text').innerText = 'Copied!';
         setTimeout(() => {
           document.getElementById('copy-icon').innerText = '📋';
-          document.getElementById('copy-text').innerText = 'Copiar link de cancelación';
+          document.getElementById('copy-text').innerText = 'Copy cancellation link';
         }, 2500);
       }).catch(() => {
         // Fallback for older browsers

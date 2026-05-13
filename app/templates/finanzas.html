@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Finanzas — Cold Plunge Tracker{% endblock %}
+{% block title %}Finances — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
 <div class="page-header">
@@ -15,33 +15,33 @@
       {% endfor %}
     </select>
     <select name="month" class="form-select-sm" onchange="this.form.submit()">
-      {% set month_names = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] %}
+      {% set month_names = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
       {% for y, m in months %}
         <option value="{{ m }}" {% if m == sel_month and y == sel_year %}selected{% endif %}>
           {{ month_names[m-1] }} {{ y }}
         </option>
       {% endfor %}
     </select>
-    <noscript><button type="submit" class="btn btn-secondary btn-sm">Ir</button></noscript>
+    <noscript><button type="submit" class="btn btn-secondary btn-sm">Go</button></noscript>
   </form>
 </div>
 
 <!-- Summary cards -->
 <div class="cards-grid">
   <div class="card card-income">
-    <div class="card-label">Ingresos del mes</div>
+    <div class="card-label">Monthly income</div>
     <div class="card-value">${{ "%.2f"|format(ingresos_mes) }}</div>
   </div>
   <div class="card card-expense">
-    <div class="card-label">Gastos del mes</div>
+    <div class="card-label">Monthly expenses</div>
     <div class="card-value">${{ "%.2f"|format(gastos_mes) }}</div>
   </div>
   <div class="card {% if ganancia_mes >= 0 %}card-profit{% else %}card-loss{% endif %}">
-    <div class="card-label">Ganancia neta del mes</div>
+    <div class="card-label">Net profit this month</div>
     <div class="card-value">${{ "%.2f"|format(ganancia_mes) }}</div>
   </div>
   <div class="card card-total">
-    <div class="card-label">Total acumulado</div>
+    <div class="card-label">Total accumulated</div>
     <div class="card-value">${{ "%.2f"|format(total_acumulado) }}</div>
   </div>
 </div>
@@ -49,24 +49,24 @@
 <!-- Quick add transaction -->
 <div class="section">
   <div class="section-header">
-    <h2 class="section-title">Agregar transacción</h2>
+    <h2 class="section-title">Add transaction</h2>
   </div>
   <form method="post" action="/transacciones/nueva" class="quick-form">
     <input type="hidden" name="redirect_to" value="/" />
     <div class="quick-form-grid">
       <div class="form-group">
-        <label class="form-label">Fecha</label>
+        <label class="form-label">Date</label>
         <input type="date" name="tx_date" class="form-input" value="{{ today.isoformat() }}" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo</label>
+        <label class="form-label">Type</label>
         <select name="tipo" class="form-input" id="dash-tipo" onchange="updateCategories(this, 'dash-category')">
-          <option value="ingreso">Ingreso</option>
-          <option value="gasto">Gasto</option>
+          <option value="ingreso">Income</option>
+          <option value="gasto">Expense</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Categoría</label>
+        <label class="form-label">Category</label>
         <select name="category" class="form-input" id="dash-category">
           {% for cat in income_categories %}
             <option value="{{ cat }}">{{ cat }}</option>
@@ -74,32 +74,32 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Monto ($)</label>
+        <label class="form-label">Amount ($)</label>
         <input type="number" name="amount" class="form-input" step="0.01" min="0.01" placeholder="0.00" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Ubicación</label>
+        <label class="form-label">Location</label>
         <select name="location_id" class="form-input">
-          <option value="">Sin ubicación</option>
+          <option value="">No location</option>
           {% for loc in locations %}
             <option value="{{ loc.id }}">{{ loc.name }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Nota (opcional)</label>
-        <input type="text" name="note" class="form-input" placeholder="Descripción..." />
+        <label class="form-label">Note (optional)</label>
+        <input type="text" name="note" class="form-input" placeholder="Description..." />
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar transacción</button>
+    <button type="submit" class="btn btn-primary">Save transaction</button>
   </form>
 </div>
 
 <!-- Recent transactions -->
 <div class="section">
   <div class="section-header">
-    <h2 class="section-title">Últimas 10 transacciones</h2>
-    <a href="/transacciones" class="btn btn-secondary btn-sm">Ver todas</a>
+    <h2 class="section-title">Last 10 transactions</h2>
+    <a href="/transacciones" class="btn btn-secondary btn-sm">View all</a>
   </div>
 
   {% if recent %}
@@ -107,12 +107,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Fecha</th>
-          <th>Tipo</th>
-          <th>Categoría</th>
-          <th>Ubicación</th>
-          <th>Monto</th>
-          <th>Nota</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Location</th>
+          <th>Amount</th>
+          <th>Note</th>
         </tr>
       </thead>
       <tbody>
@@ -136,7 +136,7 @@
     </table>
   </div>
   {% else %}
-  <p class="empty-state">No hay transacciones registradas aún.</p>
+  <p class="empty-state">No transactions recorded yet.</p>
   {% endif %}
 </div>
 

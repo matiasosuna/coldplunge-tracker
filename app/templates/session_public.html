@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -178,36 +178,36 @@
     <!-- Session info card -->
     <div class="session-info-card">
       <div class="info-item">
-        <span class="info-label">📅 Fecha</span>
+        <span class="info-label">📅 Date</span>
         <span class="info-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">🕐 Hora</span>
+        <span class="info-label">🕐 Time</span>
         <span class="info-value">{{ sess.time }}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">📍 Lugar</span>
+        <span class="info-label">📍 Location</span>
         <span class="info-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">💰 Precio</span>
+        <span class="info-label">💰 Price</span>
         <span class="info-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
       </div>
 
       <!-- Spots indicator -->
       {% if spots_remaining <= 0 %}
       <div class="spots-indicator spots-red">
-        <span>Lugares llenos</span>
+        <span>Spots full</span>
         <span>{{ signup_count }} / {{ sess.max_spots }}</span>
       </div>
       {% elif spots_remaining <= 3 %}
       <div class="spots-indicator spots-yellow">
-        <span>⚡ Últimos lugares</span>
-        <span>{{ spots_remaining }} / {{ sess.max_spots }} disponibles</span>
+        <span>⚡ Last spots</span>
+        <span>{{ spots_remaining }} / {{ sess.max_spots }} available</span>
       </div>
       {% else %}
       <div class="spots-indicator spots-green">
-        <span>✅ Lugares disponibles</span>
+        <span>✅ Spots available</span>
         <span>{{ spots_remaining }} / {{ sess.max_spots }}</span>
       </div>
       {% endif %}
@@ -224,25 +224,25 @@
     <div class="unavailable-card">
       <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">😔</p>
       {% if not sess.active %}
-      <p>Esta sesión no está disponible en este momento.</p>
+      <p>This session is not available right now.</p>
       {% else %}
-      <p>Esta sesión ya está completa. No quedan lugares disponibles.</p>
+      <p>This session is full. No spots remaining.</p>
       {% endif %}
     </div>
 
     {% elif not authenticated %}
     <!-- Password form -->
     <div class="auth-card">
-      <h2>🔒 Ingresá la contraseña para anotarte</h2>
+      <h2>🔒 Enter the password to sign up</h2>
       {% if auth_error is defined and auth_error %}
       <div class="alert alert-error" style="margin-bottom: 0.75rem;">{{ auth_error }}</div>
       {% endif %}
       <form method="post" action="/sesion/{{ sess.id }}/auth" class="form-gap">
         <div class="form-group">
-          <label class="form-label">Contraseña de acceso</label>
-          <input type="password" name="password" class="form-input" placeholder="Ingresá la contraseña" required autofocus />
+          <label class="form-label">Access password</label>
+          <input type="password" name="password" class="form-input" placeholder="Enter password" required autofocus />
         </div>
-        <button type="submit" class="btn btn-primary btn-full">Ingresar →</button>
+        <button type="submit" class="btn btn-primary btn-full">Enter →</button>
       </form>
     </div>
 
@@ -250,17 +250,17 @@
     <!-- Signup form -->
     {% if spots_remaining > 0 %}
     <div class="signup-card">
-      <h2>✍️ Anotate en esta sesión</h2>
+      <h2>✍️ Sign up for this session</h2>
       <form method="post" action="/sesion/{{ sess.id }}/signup" class="form-gap">
         <div class="form-group">
-          <label class="form-label">Tu nombre *</label>
-          <input type="text" name="name" class="form-input" placeholder="Ej: Matías" required autofocus />
+          <label class="form-label">Your name *</label>
+          <input type="text" name="name" class="form-input" placeholder="e.g. Matías" required autofocus />
         </div>
         <div class="form-group">
-          <label class="form-label">WhatsApp (opcional)</label>
+          <label class="form-label">WhatsApp (optional)</label>
           <input type="tel" name="whatsapp" class="form-input" placeholder="+84..." />
         </div>
-        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 0.25rem;">¡Anotarme! 🎉</button>
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 0.25rem;">Sign me up! 🎉</button>
       </form>
     </div>
     {% endif %}
@@ -268,7 +268,7 @@
     <!-- Attendees list -->
     {% if attendee_names %}
     <div class="attendees-card">
-      <h3>🏊 Ya anotados ({{ signup_count }})</h3>
+      <h3>🏊 Already signed up ({{ signup_count }})</h3>
       <div class="attendees-list">
         {% for name in attendee_names %}
         <span class="attendee-chip">{{ name }}</span>

@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Pendientes — Cold Plunge{% endblock %}
+{% block title %}Tasks — Cold Plunge{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">📋 Pendientes</h1>
+  <h1 class="page-title">📋 Tasks</h1>
 </div>
 
 <!-- Add form -->
 <div class="section">
   <div class="section-header">
-    <h2 class="section-title">Agregar pendiente</h2>
+    <h2 class="section-title">Add task</h2>
   </div>
   <form method="post" action="/pendientes/nuevo">
     <div class="quick-form-grid">
       <div class="form-group" style="grid-column: 1 / -1;">
-        <label class="form-label">Tarea *</label>
-        <input type="text" name="title" class="form-input" placeholder="Ej: Comprar bolsas de hielo extra" required autofocus />
+        <label class="form-label">Task *</label>
+        <input type="text" name="title" class="form-input" placeholder="e.g. Buy extra ice bags" required autofocus />
       </div>
       <div class="form-group">
-        <label class="form-label">Categoría</label>
+        <label class="form-label">Category</label>
         <select name="category" class="form-input">
           {% for cat in todo_categories %}
           <option value="{{ cat }}">{{ cat | capitalize }}</option>
@@ -27,7 +27,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Prioridad</label>
+        <label class="form-label">Priority</label>
         <select name="priority" class="form-input">
           {% for p in todo_priorities %}
           <option value="{{ p }}">{{ p | capitalize }}</option>
@@ -35,12 +35,12 @@
         </select>
       </div>
       <div class="form-group" style="grid-column: 1 / -1;">
-        <label class="form-label">Nota (opcional)</label>
-        <input type="text" name="note" class="form-input" placeholder="Detalles adicionales..." />
+        <label class="form-label">Note (optional)</label>
+        <input type="text" name="note" class="form-input" placeholder="Additional details..." />
       </div>
     </div>
     <div class="form-actions" style="margin-top: 0.75rem;">
-      <button type="submit" class="btn btn-primary">Agregar</button>
+      <button type="submit" class="btn btn-primary">Add</button>
     </div>
   </form>
 </div>
@@ -49,18 +49,18 @@
 <div class="section">
   <form method="get" action="/pendientes" class="filter-bar">
     <select name="categoria" class="form-input form-input-sm" onchange="this.form.submit()">
-      <option value="">Todas las categorías</option>
+      <option value="">All categories</option>
       {% for cat in todo_categories %}
       <option value="{{ cat }}" {% if categoria == cat %}selected{% endif %}>{{ cat | capitalize }}</option>
       {% endfor %}
     </select>
     <select name="estado" class="form-input form-input-sm" onchange="this.form.submit()">
-      <option value="">Todos</option>
-      <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendientes</option>
-      <option value="hecho" {% if estado == "hecho" %}selected{% endif %}>Hechos</option>
+      <option value="">All</option>
+      <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pending</option>
+      <option value="hecho" {% if estado == "hecho" %}selected{% endif %}>Done</option>
     </select>
     {% if categoria or estado %}
-    <a href="/pendientes" class="btn btn-secondary btn-sm">Limpiar</a>
+    <a href="/pendientes" class="btn btn-secondary btn-sm">Clear</a>
     {% endif %}
   </form>
 </div>
@@ -72,7 +72,7 @@
     {% for item in items %}
     <li class="todo-item {% if item.done %}todo-done{% endif %} priority-{{ item.priority }}">
       <form method="post" action="/pendientes/{{ item.id }}/toggle" style="display:contents;">
-        <button type="submit" class="todo-check" title="Marcar como {% if item.done %}pendiente{% else %}hecho{% endif %}">
+        <button type="submit" class="todo-check" title="Mark as {% if item.done %}pending{% else %}done{% endif %}">
           {% if item.done %}✅{% else %}⬜{% endif %}
         </button>
       </form>
@@ -87,13 +87,13 @@
         </div>
       </div>
       <form method="post" action="/pendientes/{{ item.id }}/delete" style="display:contents;">
-        <button type="submit" class="btn-icon btn-danger-ghost" onclick="return confirm('¿Eliminar?')" title="Eliminar">🗑</button>
+        <button type="submit" class="btn-icon btn-danger-ghost" onclick="return confirm('Delete?')" title="Delete">🗑</button>
       </form>
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  <p class="empty-state">No hay pendientes. ¡Todo al día! 🎉</p>
+  <p class="empty-state">No tasks. All caught up! 🎉</p>
   {% endif %}
 </div>
 {% endblock %}
