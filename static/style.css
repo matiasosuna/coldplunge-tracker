@@ -751,16 +751,21 @@ body {
 
 /* Donation button */
 .social-donate-btn {
-  background: linear-gradient(135deg, #92400e, #b45309);
-  border-color: #d97706;
-  color: #fef3c7;
-  margin-top: 0.25rem;
+  background: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+  border-color: transparent;
+  color: #fff;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+  font-size: 1rem;
+  padding: 1rem 1.25rem;
 }
 
 .social-donate-btn:hover {
-  background: linear-gradient(135deg, #b45309, #d97706);
-  border-color: #f59e0b;
-  color: #fff;
+  filter: brightness(1.12);
+  background: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+  border-color: transparent;
+  box-shadow: 0 6px 28px rgba(236, 72, 153, 0.55);
+  transform: translateY(-2px);
 }
 
 /* Photo gallery */
