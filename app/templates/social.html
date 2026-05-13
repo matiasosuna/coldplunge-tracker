@@ -30,12 +30,14 @@
     </header>
 
     <!-- Links -->
+    {% set social_links = links | selectattr("is_donation", "equalto", false) | list %}
+    {% set donation_links = links | selectattr("is_donation", "equalto", true) | list %}
+
     <section class="social-links-section">
-      {% for link in links %}
-      <a href="{{ link.url }}" class="social-link-btn {% if link.is_donation %}social-donate-btn{% else %}platform-{{ link.platform }}{% endif %}" target="_blank" rel="noopener noreferrer">
+      {% for link in social_links %}
+      <a href="{{ link.url }}" class="social-link-btn platform-{{ link.platform }}" target="_blank" rel="noopener noreferrer">
         <span class="social-link-icon">
-          {% if link.is_donation %}<i class="fa-solid fa-heart"></i>
-          {% elif link.platform == "instagram" %}<i class="fa-brands fa-instagram"></i>
+          {% if link.platform == "instagram" %}<i class="fa-brands fa-instagram"></i>
           {% elif link.platform == "tiktok" %}<i class="fa-brands fa-tiktok"></i>
           {% elif link.platform == "whatsapp" %}<i class="fa-brands fa-whatsapp"></i>
           {% elif link.platform == "youtube" %}<i class="fa-brands fa-youtube"></i>
@@ -48,11 +50,26 @@
       </a>
       {% endfor %}
 
-      {% if profile.donation_link %}
-      <a href="{{ profile.donation_link }}" class="social-link-btn social-donate-btn" target="_blank" rel="noopener noreferrer">
-        <span class="social-link-icon"><i class="fa-solid fa-heart"></i></span>
-        <span class="social-link-label">{{ profile.donation_label or "Apoyanos" }}</span>
-      </a>
+      {% if donation_links | length == 1 %}
+        <a href="{{ donation_links[0].url }}" class="social-link-btn social-donate-btn" target="_blank" rel="noopener noreferrer">
+          <span class="social-link-icon"><i class="fa-solid fa-heart"></i></span>
+          <span class="social-link-label">{{ donation_links[0].label }}</span>
+        </a>
+      {% elif donation_links | length > 1 %}
+        <div class="donate-dropdown">
+          <button class="social-link-btn social-donate-btn donate-toggle" onclick="toggleDonate()" type="button">
+            <span class="social-link-icon"><i class="fa-solid fa-heart"></i></span>
+            <span class="social-link-label">Apoyanos</span>
+            <span class="donate-arrow"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="donate-menu" id="donateMenu">
+            {% for link in donation_links %}
+            <a href="{{ link.url }}" class="donate-option" target="_blank" rel="noopener noreferrer">
+              <i class="fa-solid fa-heart"></i> {{ link.label }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
       {% endif %}
     </section>
 
@@ -89,6 +106,19 @@
   </div>
 
   <script>
+    function toggleDonate() {
+      const menu = document.getElementById('donateMenu');
+      const arrow = document.querySelector('.donate-arrow i');
+      menu.classList.toggle('open');
+      arrow.classList.toggle('fa-chevron-down');
+      arrow.classList.toggle('fa-chevron-up');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.donate-dropdown')) {
+        document.getElementById('donateMenu')?.classList.remove('open');
+      }
+    });
+
     function sharePage() {
       if (navigator.share) {
         navigator.share({
