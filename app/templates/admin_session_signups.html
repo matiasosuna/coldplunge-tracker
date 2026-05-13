@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Anotados — {{ sess.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">🧊 Anotados — {{ sess.title }}</h1>
+  <a href="/admin/sessions" class="btn btn-secondary btn-sm">← Volver a sesiones</a>
+</div>
+
+<!-- Session details -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Detalles de la sesión</h2>
+    {% if sess.active %}
+    <span class="badge badge-income">Activa</span>
+    {% else %}
+    <span class="badge badge-inactive">Inactiva</span>
+    {% endif %}
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;">
+    <div class="stat-item">
+      <span class="stat-label">Fecha</span>
+      <span class="stat-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Hora</span>
+      <span class="stat-value">{{ sess.time }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Ubicación</span>
+      <span class="stat-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Precio</span>
+      <span class="stat-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Lugares</span>
+      {% set signup_count = sess.signups | length %}
+      {% set spots_remaining = sess.max_spots - signup_count %}
+      {% if spots_remaining <= 0 %}
+      <span class="stat-value" style="color: var(--color-expense);">{{ signup_count }} / {{ sess.max_spots }} — Lleno</span>
+      {% elif spots_remaining <= 3 %}
+      <span class="stat-value" style="color: #f59e0b;">{{ signup_count }} / {{ sess.max_spots }}</span>
+      {% else %}
+      <span class="stat-value" style="color: var(--color-income);">{{ signup_count }} / {{ sess.max_spots }}</span>
+      {% endif %}
+    </div>
+    {% if sess.notes %}
+    <div class="stat-item" style="grid-column: 1 / -1;">
+      <span class="stat-label">Notas</span>
+      <span class="stat-value" style="font-size: 0.9rem; font-weight: 400; color: var(--color-text-muted);">{{ sess.notes }}</span>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Signups list -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Personas anotadas</h2>
+  </div>
+
+  {% if sess.signups %}
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>WhatsApp</th>
+          <th>Fecha de registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for signup in sess.signups %}
+        <tr>
+          <td class="text-muted">{{ loop.index }}</td>
+          <td>{{ signup.name }}</td>
+          <td>
+            {% if signup.whatsapp %}
+            <a href="https://wa.me/{{ signup.whatsapp | replace('+', '') | replace(' ', '') }}" target="_blank" style="color: #25D366;">{{ signup.whatsapp }}</a>
+            {% else %}
+            <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td class="text-muted" style="font-size: 0.8rem;">{{ signup.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td class="actions-cell">
+            <form method="post" action="/admin/sessions/{{ sess.id }}/signups/{{ signup.id }}/delete" onsubmit="return confirm('¿Cancelar el lugar de {{ signup.name }}?')">
+              <button type="submit" class="btn btn-danger btn-sm">Cancelar lugar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="table-count">{{ sess.signups | length }} persona{% if sess.signups | length != 1 %}s{% endif %} anotada{% if sess.signups | length != 1 %}s{% endif %}</p>
+  {% else %}
+  <p class="empty-state">Nadie se ha anotado aún.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 import os
+import secrets
 from datetime import date, timedelta
 from typing import Optional
 
@@ -14,7 +15,7 @@ from sqlalchemy import func, extract
 
 from app.database import engine, get_db
 from app import models
-from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto, TodoItem
+from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto, TodoItem, Session as IceSession, SessionSignup
 from app.auth import (
     verify_password, create_session_token, get_current_user,
     COOKIE_NAME, REMEMBER_ME_DAYS
@@ -29,6 +30,7 @@ def run_migrations():
         migrations = [
             "ALTER TABLE social_links ADD COLUMN IF NOT EXISTS is_donation BOOLEAN DEFAULT FALSE",
             "ALTER TABLE todo_items ADD COLUMN IF NOT EXISTS note VARCHAR(1000)",
+            "ALTER TABLE sessions ADD COLUMN IF NOT EXISTS notes VARCHAR(500)",
         ]
         for sql in migrations:
             try:
@@ -658,3 +660,235 @@ async def delete_pendiente(
         db.delete(item)
         db.commit()
     return RedirectResponse(url="/pendientes", status_code=302)
+
+
+# ---------------------------------------------------------------------------
+# Session signup system
+# ---------------------------------------------------------------------------
+
+def check_session_auth(request: Request, session_id: int) -> bool:
+    return request.cookies.get(f"sesion_{session_id}_auth") == "ok"
+
+
+# --- Admin routes ---
+
+@app.get("/admin/sessions", response_class=HTMLResponse)
+async def admin_sessions_page(request: Request, db: Session = Depends(get_db)):
+    if not get_current_user(request):
+        return auth_redirect()
+    sessions = db.query(IceSession).order_by(IceSession.date.desc(), IceSession.time).all()
+    return tr(request, "admin_sessions.html", {"sessions": sessions})
+
+
+@app.post("/admin/sessions/nueva")
+async def admin_create_session(
+    request: Request,
+    title: str = Form("Ice Bath Session"),
+    session_date: str = Form(...),
+    time: str = Form(...),
+    location: str = Form("My Khe Beach"),
+    price: str = Form("150,000 VND"),
+    max_spots: int = Form(10),
+    access_password: str = Form(...),
+    notes: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    sess = IceSession(
+        title=title.strip(),
+        date=date.fromisoformat(session_date),
+        time=time.strip(),
+        location=location.strip(),
+        price=price.strip(),
+        max_spots=max_spots,
+        access_password=access_password,
+        notes=notes.strip() if notes else None,
+    )
+    db.add(sess)
+    db.commit()
+    return RedirectResponse(url="/admin/sessions", status_code=302)
+
+
+@app.post("/admin/sessions/{session_id}/toggle")
+async def admin_toggle_session(
+    request: Request,
+    session_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if sess:
+        sess.active = not sess.active
+        db.commit()
+    return RedirectResponse(url="/admin/sessions", status_code=302)
+
+
+@app.post("/admin/sessions/{session_id}/delete")
+async def admin_delete_session(
+    request: Request,
+    session_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if sess:
+        db.delete(sess)
+        db.commit()
+    return RedirectResponse(url="/admin/sessions", status_code=302)
+
+
+@app.get("/admin/sessions/{session_id}/signups", response_class=HTMLResponse)
+async def admin_session_signups(
+    request: Request,
+    session_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if not sess:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+    return tr(request, "admin_session_signups.html", {"sess": sess})
+
+
+@app.post("/admin/sessions/{session_id}/signups/{signup_id}/delete")
+async def admin_delete_signup(
+    request: Request,
+    session_id: int,
+    signup_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    signup = db.query(SessionSignup).filter(
+        SessionSignup.id == signup_id,
+        SessionSignup.session_id == session_id,
+    ).first()
+    if signup:
+        db.delete(signup)
+        db.commit()
+    return RedirectResponse(url=f"/admin/sessions/{session_id}/signups", status_code=302)
+
+
+# --- Public routes ---
+
+@app.get("/sesion/{session_id}", response_class=HTMLResponse)
+async def public_session_page(request: Request, session_id: int, db: Session = Depends(get_db)):
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if not sess:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+    authenticated = check_session_auth(request, session_id)
+    signup_count = len(sess.signups)
+    spots_remaining = sess.max_spots - signup_count
+    # First names only for privacy
+    attendee_names = [s.name.split()[0] for s in sess.signups]
+    return tr(request, "session_public.html", {
+        "sess": sess,
+        "authenticated": authenticated,
+        "signup_count": signup_count,
+        "spots_remaining": spots_remaining,
+        "attendee_names": attendee_names,
+    })
+
+
+@app.post("/sesion/{session_id}/auth")
+async def public_session_auth(
+    request: Request,
+    session_id: int,
+    password: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if not sess:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+    if password == sess.access_password:
+        response = RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
+        response.set_cookie(
+            key=f"sesion_{session_id}_auth",
+            value="ok",
+            httponly=True,
+            max_age=86400,
+            samesite="lax",
+        )
+        return response
+    signup_count = len(sess.signups)
+    spots_remaining = sess.max_spots - signup_count
+    attendee_names = [s.name.split()[0] for s in sess.signups]
+    return tr(request, "session_public.html", {
+        "sess": sess,
+        "authenticated": False,
+        "signup_count": signup_count,
+        "spots_remaining": spots_remaining,
+        "attendee_names": attendee_names,
+        "auth_error": "Contraseña incorrecta",
+    })
+
+
+@app.post("/sesion/{session_id}/signup")
+async def public_session_signup(
+    request: Request,
+    session_id: int,
+    name: str = Form(...),
+    whatsapp: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    sess = db.query(IceSession).filter(IceSession.id == session_id).first()
+    if not sess:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+    if not check_session_auth(request, session_id):
+        return RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
+    signup_count = len(sess.signups)
+    if not sess.active or signup_count >= sess.max_spots:
+        return RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
+    cancel_token = secrets.token_urlsafe(32)
+    signup = SessionSignup(
+        session_id=session_id,
+        name=name.strip(),
+        whatsapp=whatsapp.strip() if whatsapp else None,
+        cancel_token=cancel_token,
+    )
+    db.add(signup)
+    db.commit()
+    db.refresh(signup)
+    cancel_url = str(request.base_url).rstrip("/") + f"/sesion/{session_id}/cancelar/{cancel_token}"
+    return tr(request, "session_confirm.html", {
+        "sess": sess,
+        "signup": signup,
+        "cancel_url": cancel_url,
+    })
+
+
+@app.get("/sesion/{session_id}/cancelar/{cancel_token}", response_class=HTMLResponse)
+async def public_cancel_page(
+    request: Request,
+    session_id: int,
+    cancel_token: str,
+    db: Session = Depends(get_db),
+):
+    signup = db.query(SessionSignup).filter(
+        SessionSignup.cancel_token == cancel_token,
+        SessionSignup.session_id == session_id,
+    ).first()
+    if not signup:
+        raise HTTPException(status_code=404, detail="Link de cancelación no válido")
+    return tr(request, "session_cancel.html", {"signup": signup, "sess": signup.session})
+
+
+@app.post("/sesion/{session_id}/cancelar/{cancel_token}")
+async def public_cancel_signup(
+    request: Request,
+    session_id: int,
+    cancel_token: str,
+    db: Session = Depends(get_db),
+):
+    signup = db.query(SessionSignup).filter(
+        SessionSignup.cancel_token == cancel_token,
+        SessionSignup.session_id == session_id,
+    ).first()
+    if signup:
+        db.delete(signup)
+        db.commit()
+    return RedirectResponse(url=f"/sesion/{session_id}", status_code=302)

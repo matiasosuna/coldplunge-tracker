@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ sess.title }}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .session-body {
+      background: linear-gradient(160deg, #0d1b2a 0%, #0a2540 60%, #0d2137 100%);
+      min-height: 100vh;
+    }
+    .session-page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    .session-header {
+      text-align: center;
+      padding: 1.5rem 0 1.25rem;
+    }
+    .session-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .session-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .session-subtitle {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+    }
+    .session-info-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+    .info-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .spots-indicator {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .spots-green { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #10b981; }
+    .spots-yellow { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; }
+    .spots-red { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
+    .auth-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .auth-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+    .unavailable-card {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+    .unavailable-card p {
+      color: #fca5a5;
+      font-size: 0.95rem;
+    }
+    .signup-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .signup-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+    .attendees-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .attendees-card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .attendees-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .attendee-chip {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.875rem;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    .session-notes {
+      background: rgba(14,165,233,0.07);
+      border: 1px solid rgba(14,165,233,0.2);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .session-footer {
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.8rem;
+      margin-top: 1.5rem;
+      opacity: 0.6;
+    }
+    .form-gap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  </style>
+</head>
+<body class="session-body">
+  <div class="session-page">
+
+    <!-- Header -->
+    <div class="session-header">
+      <span class="session-icon">🧊</span>
+      <h1 class="session-title">{{ sess.title }}</h1>
+      <p class="session-subtitle">{{ sess.location }}</p>
+    </div>
+
+    <!-- Session info card -->
+    <div class="session-info-card">
+      <div class="info-item">
+        <span class="info-label">📅 Fecha</span>
+        <span class="info-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">🕐 Hora</span>
+        <span class="info-value">{{ sess.time }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">📍 Lugar</span>
+        <span class="info-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">💰 Precio</span>
+        <span class="info-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
+      </div>
+
+      <!-- Spots indicator -->
+      {% if spots_remaining <= 0 %}
+      <div class="spots-indicator spots-red">
+        <span>Lugares llenos</span>
+        <span>{{ signup_count }} / {{ sess.max_spots }}</span>
+      </div>
+      {% elif spots_remaining <= 3 %}
+      <div class="spots-indicator spots-yellow">
+        <span>⚡ Últimos lugares</span>
+        <span>{{ spots_remaining }} / {{ sess.max_spots }} disponibles</span>
+      </div>
+      {% else %}
+      <div class="spots-indicator spots-green">
+        <span>✅ Lugares disponibles</span>
+        <span>{{ spots_remaining }} / {{ sess.max_spots }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if sess.notes %}
+    <div class="session-notes">
+      ℹ️ {{ sess.notes }}
+    </div>
+    {% endif %}
+
+    <!-- Not available -->
+    {% if not sess.active or spots_remaining <= 0 %}
+    <div class="unavailable-card">
+      <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">😔</p>
+      {% if not sess.active %}
+      <p>Esta sesión no está disponible en este momento.</p>
+      {% else %}
+      <p>Esta sesión ya está completa. No quedan lugares disponibles.</p>
+      {% endif %}
+    </div>
+
+    {% elif not authenticated %}
+    <!-- Password form -->
+    <div class="auth-card">
+      <h2>🔒 Ingresá la contraseña para anotarte</h2>
+      {% if auth_error is defined and auth_error %}
+      <div class="alert alert-error" style="margin-bottom: 0.75rem;">{{ auth_error }}</div>
+      {% endif %}
+      <form method="post" action="/sesion/{{ sess.id }}/auth" class="form-gap">
+        <div class="form-group">
+          <label class="form-label">Contraseña de acceso</label>
+          <input type="password" name="password" class="form-input" placeholder="Ingresá la contraseña" required autofocus />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Ingresar →</button>
+      </form>
+    </div>
+
+    {% else %}
+    <!-- Signup form -->
+    {% if spots_remaining > 0 %}
+    <div class="signup-card">
+      <h2>✍️ Anotate en esta sesión</h2>
+      <form method="post" action="/sesion/{{ sess.id }}/signup" class="form-gap">
+        <div class="form-group">
+          <label class="form-label">Tu nombre *</label>
+          <input type="text" name="name" class="form-input" placeholder="Ej: Matías" required autofocus />
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp (opcional)</label>
+          <input type="tel" name="whatsapp" class="form-input" placeholder="+84..." />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 0.25rem;">¡Anotarme! 🎉</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <!-- Attendees list -->
+    {% if attendee_names %}
+    <div class="attendees-card">
+      <h3>🏊 Ya anotados ({{ signup_count }})</h3>
+      <div class="attendees-list">
+        {% for name in attendee_names %}
+        <span class="attendee-chip">{{ name }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% endif %}
+
+    <div class="session-footer">
+      Cold Plunge Da Nang 🧊
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cancelar lugar — {{ sess.title }}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .cancel-body {
+      background: linear-gradient(160deg, #0d1b2a 0%, #0a2540 60%, #0d2137 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cancel-page {
+      max-width: 400px;
+      width: 100%;
+      padding: 1.5rem 1.25rem;
+    }
+    .cancel-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .cancel-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .cancel-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin-bottom: 0.35rem;
+    }
+    .cancel-subtitle {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+    }
+    .cancel-detail-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.9rem;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      color: var(--color-text-muted);
+    }
+    .detail-value {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .cancel-name-highlight {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+    .cancel-name-highlight p {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .cancel-name-highlight strong {
+      font-size: 1.1rem;
+      color: var(--color-text);
+    }
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.5rem;
+    }
+    .back-link:hover {
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body class="cancel-body">
+  <div class="cancel-page">
+
+    <div class="cancel-header">
+      <span class="cancel-icon">😔</span>
+      <h1 class="cancel-title">¿Cancelar tu lugar?</h1>
+      <p class="cancel-subtitle">Esta acción no se puede deshacer</p>
+    </div>
+
+    <div class="cancel-name-highlight">
+      <p>Lugar reservado por</p>
+      <strong>{{ signup.name }}</strong>
+    </div>
+
+    <div class="cancel-detail-card">
+      <div class="detail-row">
+        <span class="detail-label">Sesión</span>
+        <span class="detail-value">{{ sess.title }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Fecha</span>
+        <span class="detail-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Hora</span>
+        <span class="detail-value">{{ sess.time }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Lugar</span>
+        <span class="detail-value">{{ sess.location }}</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <form method="post" action="/sesion/{{ sess.id }}/cancelar/{{ signup.cancel_token }}">
+        <button type="submit" class="btn btn-danger btn-full" style="padding: 0.75rem; font-size: 1rem;">
+          Sí, cancelar mi lugar
+        </button>
+      </form>
+      <a href="/sesion/{{ sess.id }}" class="back-link">← No, mantener mi lugar</a>
+    </div>
+
+  </div>
+</body>
+</html>

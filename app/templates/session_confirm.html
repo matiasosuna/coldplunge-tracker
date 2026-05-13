@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Anotado! — {{ sess.title }}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .confirm-body {
+      background: linear-gradient(160deg, #0d1b2a 0%, #0a2540 60%, #0d2137 100%);
+      min-height: 100vh;
+    }
+    .confirm-page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    .confirm-header {
+      text-align: center;
+      padding: 2rem 0 1.5rem;
+    }
+    .confirm-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .confirm-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--color-income);
+      margin-bottom: 0.5rem;
+    }
+    .confirm-name {
+      font-size: 1.1rem;
+      color: var(--color-text-muted);
+    }
+    .confirm-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+    .info-value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .cancel-card {
+      background: rgba(239,68,68,0.06);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .cancel-card h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #fca5a5;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .cancel-card p {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+    .cancel-url-box {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.85rem;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      word-break: break-all;
+      margin-bottom: 0.75rem;
+      font-family: monospace;
+    }
+    .warning-box {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #fcd34d;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .back-link:hover {
+      color: var(--color-primary);
+    }
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+    .copy-btn:hover {
+      background: var(--color-border);
+    }
+  </style>
+</head>
+<body class="confirm-body">
+  <div class="confirm-page">
+
+    <div class="confirm-header">
+      <span class="confirm-icon">🎉</span>
+      <h1 class="confirm-title">¡Estás anotado/a!</h1>
+      <p class="confirm-name">{{ signup.name }}</p>
+    </div>
+
+    <!-- Session details -->
+    <div class="confirm-card">
+      <div class="info-item">
+        <span class="info-label">📅 Fecha</span>
+        <span class="info-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">🕐 Hora</span>
+        <span class="info-value">{{ sess.time }}</span>
+      </div>
+      <div class="info-item" style="grid-column: 1 / -1;">
+        <span class="info-label">📍 Lugar</span>
+        <span class="info-value">{{ sess.location }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">💰 Precio</span>
+        <span class="info-value">{{ sess.price }}</span>
+      </div>
+    </div>
+
+    <!-- Warning -->
+    <div class="warning-box">
+      ⚠️ Guardá el link de abajo — es la <strong>única forma de cancelar</strong> tu lugar si no podés ir.
+    </div>
+
+    <!-- Cancel link -->
+    <div class="cancel-card">
+      <h3>Tu link para cancelar</h3>
+      <p>Si no podés asistir, usá este link para liberar tu lugar:</p>
+      <div class="cancel-url-box" id="cancel-url">{{ cancel_url }}</div>
+      <button class="copy-btn" onclick="copyCancel()">
+        <span id="copy-icon">📋</span>
+        <span id="copy-text">Copiar link de cancelación</span>
+      </button>
+    </div>
+
+    <a href="/sesion/{{ sess.id }}" class="back-link">← Volver a la sesión</a>
+  </div>
+
+  <script>
+    function copyCancel() {
+      const url = document.getElementById('cancel-url').innerText.trim();
+      navigator.clipboard.writeText(url).then(() => {
+        document.getElementById('copy-icon').innerText = '✅';
+        document.getElementById('copy-text').innerText = '¡Link copiado!';
+        setTimeout(() => {
+          document.getElementById('copy-icon').innerText = '📋';
+          document.getElementById('copy-text').innerText = 'Copiar link de cancelación';
+        }, 2500);
+      }).catch(() => {
+        // Fallback for older browsers
+        const el = document.createElement('textarea');
+        el.value = url;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        document.getElementById('copy-text').innerText = '¡Copiado!';
+      });
+    }
+  </script>
+</body>
+</html>
