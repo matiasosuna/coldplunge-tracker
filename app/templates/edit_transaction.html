@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Editar transacción — Cold Plunge Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Editar transacción</h1>
+</div>
+
+<div class="section">
+  <form method="post" action="/transacciones/{{ tx.id }}/editar" class="quick-form">
+    <div class="quick-form-grid">
+      <div class="form-group">
+        <label class="form-label">Fecha</label>
+        <input type="date" name="tx_date" class="form-input" value="{{ tx.date.isoformat() }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select name="tipo" class="form-input" id="edit-tipo" onchange="updateCategories(this, 'edit-category')">
+          <option value="ingreso" {% if tx.type == 'ingreso' %}selected{% endif %}>Ingreso</option>
+          <option value="gasto" {% if tx.type == 'gasto' %}selected{% endif %}>Gasto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select name="category" class="form-input" id="edit-category">
+          {% for cat in income_categories %}
+            <option value="{{ cat }}" {% if tx.category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+          {% for cat in expense_categories %}
+            <option value="{{ cat }}" {% if tx.category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Monto ($)</label>
+        <input type="number" name="amount" class="form-input" step="0.01" min="0.01"
+               value="{{ "%.2f"|format(tx.amount) }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ubicación</label>
+        <select name="location_id" class="form-input">
+          <option value="">Sin ubicación</option>
+          {% for loc in locations %}
+            <option value="{{ loc.id }}" {% if tx.location_id == loc.id %}selected{% endif %}>{{ loc.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nota</label>
+        <input type="text" name="note" class="form-input" value="{{ tx.note or '' }}" placeholder="Descripción opcional..." />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      <a href="/transacciones" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<script>
+const incomeCategories = {{ income_categories | tojson }};
+const expenseCategories = {{ expense_categories | tojson }};
+
+function updateCategories(tipoSelect, categoryId) {
+  const currentVal = document.getElementById(categoryId).value;
+  const cats = tipoSelect.value === 'ingreso' ? incomeCategories : expenseCategories;
+  const catSelect = document.getElementById(categoryId);
+  catSelect.innerHTML = '';
+  cats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    if (c === currentVal) opt.selected = true;
+    catSelect.appendChild(opt);
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Ubicaciones — Cold Plunge Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Ubicaciones</h1>
+  <button class="btn btn-primary" onclick="toggleForm('add-location-form')">+ Nueva</button>
+</div>
+
+<!-- Add location form -->
+<div id="add-location-form" class="section collapsible" style="display:none;">
+  <h2 class="section-title">Nueva ubicación</h2>
+  <form method="post" action="/ubicaciones/nueva" class="quick-form">
+    <div class="quick-form-grid">
+      <div class="form-group">
+        <label class="form-label">Nombre *</label>
+        <input type="text" name="name" class="form-input" placeholder="Ej: Parque Central" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dirección</label>
+        <input type="text" name="address" class="form-input" placeholder="Opcional..." />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-secondary" onclick="toggleForm('add-location-form')">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Locations list -->
+<div class="section">
+  {% if loc_stats %}
+    {% for stat in loc_stats %}
+    <div class="location-card {% if not stat.location.active %}location-inactive{% endif %}">
+      <div class="location-header">
+        <div class="location-info">
+          <h3 class="location-name">{{ stat.location.name }}</h3>
+          {% if stat.location.address %}
+            <p class="location-address">{{ stat.location.address }}</p>
+          {% endif %}
+          {% if not stat.location.active %}
+            <span class="badge badge-inactive">Inactiva</span>
+          {% endif %}
+        </div>
+        <div class="location-actions">
+          <button class="btn btn-ghost btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Editar</button>
+          <form method="post" action="/ubicaciones/{{ stat.location.id }}/toggle" style="display:inline;">
+            <button type="submit" class="btn btn-ghost btn-sm">
+              {% if stat.location.active %}Desactivar{% else %}Activar{% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="location-stats">
+        <div class="stat-item">
+          <span class="stat-label">Ingresos</span>
+          <span class="stat-value text-income">${{ "%.2f"|format(stat.ingresos) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Gastos</span>
+          <span class="stat-value text-expense">${{ "%.2f"|format(stat.gastos) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ganancia</span>
+          <span class="stat-value {% if stat.ganancia >= 0 %}text-income{% else %}text-expense{% endif %}">
+            ${{ "%.2f"|format(stat.ganancia) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Edit form (hidden) -->
+      <div id="edit-{{ stat.location.id }}" class="edit-location-form" style="display:none;">
+        <form method="post" action="/ubicaciones/{{ stat.location.id }}/editar">
+          <div class="quick-form-grid">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input type="text" name="name" class="form-input" value="{{ stat.location.name }}" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dirección</label>
+              <input type="text" name="address" class="form-input" value="{{ stat.location.address or '' }}" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm('edit-{{ stat.location.id }}')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="empty-state">No hay ubicaciones registradas. Crea la primera arriba.</p>
+  {% endif %}
+</div>
+
+<script>
+function toggleForm(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleEditForm(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endblock %}
