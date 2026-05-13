@@ -23,6 +23,23 @@ from app.auth import (
 # Create tables
 models.Base.metadata.create_all(bind=engine)
 
+# Manual migrations — add columns that may not exist in older DBs
+def run_migrations():
+    with engine.connect() as conn:
+        migrations = [
+            "ALTER TABLE social_links ADD COLUMN IF NOT EXISTS is_donation BOOLEAN DEFAULT FALSE",
+            "ALTER TABLE todo_items ADD COLUMN IF NOT EXISTS note VARCHAR(1000)",
+        ]
+        for sql in migrations:
+            try:
+                conn.execute(text(sql))
+                conn.commit()
+            except Exception:
+                conn.rollback()
+
+from sqlalchemy import text
+run_migrations()
+
 app = FastAPI(title="Cold Plunge Tracker")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
