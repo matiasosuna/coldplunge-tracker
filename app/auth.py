@@ -1,11 +1,9 @@
 import os
-import bcrypt
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from fastapi import Request, HTTPException
-from fastapi.responses import RedirectResponse
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
-APP_PASSWORD_HASH = os.getenv("APP_PASSWORD_HASH", "")
+APP_PASSWORD = os.getenv("APP_PASSWORD", "")
 COOKIE_NAME = "session_token"
 REMEMBER_ME_DAYS = 30
 
@@ -13,12 +11,7 @@ serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 
 def verify_password(plain_password: str) -> bool:
-    if not APP_PASSWORD_HASH:
-        return False
-    try:
-        return bcrypt.checkpw(plain_password.encode("utf-8"), APP_PASSWORD_HASH.encode("utf-8"))
-    except Exception:
-        return False
+    return bool(APP_PASSWORD) and plain_password == APP_PASSWORD
 
 
 def create_session_token() -> str:
