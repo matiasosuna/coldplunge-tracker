@@ -19,9 +19,9 @@
         <label class="form-label">Nombre del negocio</label>
         <input type="text" name="business_name" class="form-input" value="{{ profile.business_name }}" required />
       </div>
-      <div class="form-group">
+      <div class="form-group" style="grid-column: 1 / -1;">
         <label class="form-label">Tagline / descripción</label>
-        <input type="text" name="tagline" class="form-input" value="{{ profile.tagline }}" placeholder="Ej: Terapia de frío en Buenos Aires" />
+        <textarea name="tagline" class="form-input" rows="4" placeholder="Ej: Da Nang's first mobile cold plunge...">{{ profile.tagline }}</textarea>
       </div>
       <div class="form-group">
         <label class="form-label">URL de imagen de perfil</label>
