@@ -14,7 +14,7 @@ from sqlalchemy import func, extract
 
 from app.database import engine, get_db
 from app import models
-from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES
+from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto
 from app.auth import (
     verify_password, create_session_token, get_current_user,
     COOKIE_NAME, REMEMBER_ME_DAYS
@@ -384,3 +384,160 @@ async def toggle_location(
         loc.active = not loc.active
         db.commit()
     return RedirectResponse(url="/ubicaciones", status_code=302)
+
+
+# ---------------------------------------------------------------------------
+# Social landing page helpers
+# ---------------------------------------------------------------------------
+
+def get_or_create_profile(db: Session) -> SocialProfile:
+    profile = db.query(SocialProfile).first()
+    if not profile:
+        profile = SocialProfile()
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+    return profile
+
+
+# ---------------------------------------------------------------------------
+# Public social landing page
+# ---------------------------------------------------------------------------
+
+@app.get("/social", response_class=HTMLResponse)
+async def social_page(request: Request, db: Session = Depends(get_db)):
+    profile = get_or_create_profile(db)
+    links = db.query(SocialLink).filter(SocialLink.active == True).order_by(SocialLink.order).all()
+    photos = db.query(SocialPhoto).order_by(SocialPhoto.order).all()
+    return tr(request, "social.html", {
+        "profile": profile,
+        "links": links,
+        "photos": photos,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Admin social panel
+# ---------------------------------------------------------------------------
+
+@app.get("/admin/social", response_class=HTMLResponse)
+async def admin_social_page(request: Request, db: Session = Depends(get_db)):
+    if not get_current_user(request):
+        return auth_redirect()
+    profile = get_or_create_profile(db)
+    links = db.query(SocialLink).order_by(SocialLink.order).all()
+    photos = db.query(SocialPhoto).order_by(SocialPhoto.order).all()
+    return tr(request, "admin_social.html", {
+        "profile": profile,
+        "links": links,
+        "photos": photos,
+    })
+
+
+@app.post("/admin/social/profile")
+async def admin_social_profile(
+    request: Request,
+    business_name: str = Form(...),
+    tagline: str = Form(""),
+    profile_image_url: str = Form(""),
+    donation_link: str = Form(""),
+    donation_label: str = Form("Apoyanos"),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    profile = get_or_create_profile(db)
+    profile.business_name = business_name.strip()
+    profile.tagline = tagline.strip()
+    profile.profile_image_url = profile_image_url.strip()
+    profile.donation_link = donation_link.strip()
+    profile.donation_label = donation_label.strip() or "Apoyanos"
+    db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)
+
+
+@app.post("/admin/social/links/add")
+async def admin_add_link(
+    request: Request,
+    platform: str = Form(...),
+    label: str = Form(...),
+    url: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    max_order = db.query(SocialLink).count()
+    link = SocialLink(
+        platform=platform.strip(),
+        label=label.strip(),
+        url=url.strip(),
+        order=max_order,
+    )
+    db.add(link)
+    db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)
+
+
+@app.post("/admin/social/links/{link_id}/delete")
+async def admin_delete_link(
+    request: Request,
+    link_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    link = db.query(SocialLink).filter(SocialLink.id == link_id).first()
+    if link:
+        db.delete(link)
+        db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)
+
+
+@app.post("/admin/social/links/{link_id}/toggle")
+async def admin_toggle_link(
+    request: Request,
+    link_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    link = db.query(SocialLink).filter(SocialLink.id == link_id).first()
+    if link:
+        link.active = not link.active
+        db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)
+
+
+@app.post("/admin/social/photos/add")
+async def admin_add_photo(
+    request: Request,
+    image_url: str = Form(...),
+    caption: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    max_order = db.query(SocialPhoto).count()
+    photo = SocialPhoto(
+        image_url=image_url.strip(),
+        caption=caption.strip(),
+        order=max_order,
+    )
+    db.add(photo)
+    db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)
+
+
+@app.post("/admin/social/photos/{photo_id}/delete")
+async def admin_delete_photo(
+    request: Request,
+    photo_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    photo = db.query(SocialPhoto).filter(SocialPhoto.id == photo_id).first()
+    if photo:
+        db.delete(photo)
+        db.commit()
+    return RedirectResponse(url="/admin/social", status_code=302)

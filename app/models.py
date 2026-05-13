@@ -42,3 +42,35 @@ class Transaction(Base):
 INCOME_CATEGORIES = ["Sesión", "Evento", "Otro ingreso"]
 EXPENSE_CATEGORIES = ["Hielo", "Agua", "Transporte", "Equipamiento", "Mantenimiento", "Marketing", "Otro gasto"]
 ALL_CATEGORIES = INCOME_CATEGORIES + EXPENSE_CATEGORIES
+
+
+# ---------------------------------------------------------------------------
+# Social / Landing page models
+# ---------------------------------------------------------------------------
+
+class SocialProfile(Base):
+    __tablename__ = "social_profile"
+    id = Column(Integer, primary_key=True)
+    business_name = Column(String, default="Cold Plunge")
+    tagline = Column(String, default="")
+    profile_image_url = Column(String, default="")
+    donation_link = Column(String, default="")
+    donation_label = Column(String, default="Apoyanos")
+
+
+class SocialLink(Base):
+    __tablename__ = "social_links"
+    id = Column(Integer, primary_key=True)
+    platform = Column(String)   # "instagram", "tiktok", "whatsapp", "youtube", "custom"
+    label = Column(String)
+    url = Column(String)
+    order = Column(Integer, default=0)
+    active = Column(Boolean, default=True)
+
+
+class SocialPhoto(Base):
+    __tablename__ = "social_photos"
+    id = Column(Integer, primary_key=True)
+    image_url = Column(String)
+    caption = Column(String, default="")
+    order = Column(Integer, default=0)
