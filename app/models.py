@@ -85,6 +85,26 @@ class TodoItem(Base):
     priority = Column(String(20), nullable=False, default="normal")  # high / normal / low
     done = Column(Boolean, default=False)
     note = Column(String(1000), nullable=True)
+    resolution = Column(String(2000), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ---------------------------------------------------------------------------
+# Shared expenses (convivencia)
+# ---------------------------------------------------------------------------
+
+SHARED_CATEGORIES = ["Rent", "Food", "Dining out", "Groceries", "Household", "Other"]
+SHARED_PAYERS = ["Me", "Cousin"]
+
+class SharedExpense(Base):
+    __tablename__ = "shared_expenses"
+    id = Column(Integer, primary_key=True)
+    date = Column(Date, nullable=False, default=date.today)
+    description = Column(String(300), nullable=False)
+    category = Column(String(50), nullable=False, default="Other")
+    amount = Column(Float, nullable=False)
+    paid_by = Column(String(50), nullable=False)  # "Me" or "Cousin"
+    settled = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 

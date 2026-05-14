@@ -71,20 +71,36 @@
   <ul class="todo-list">
     {% for item in items %}
     <li class="todo-item {% if item.done %}todo-done{% endif %} priority-{{ item.priority }}">
-      <form method="post" action="/pendientes/{{ item.id }}/toggle" style="display:contents;">
-        <button type="submit" class="todo-check" title="Mark as {% if item.done %}pending{% else %}done{% endif %}">
-          {% if item.done %}✅{% else %}⬜{% endif %}
-        </button>
-      </form>
+      <div style="display:contents;">
+        {% if item.done %}
+        <form method="post" action="/pendientes/{{ item.id }}/toggle" style="display:contents;">
+          <button type="submit" class="todo-check" title="Mark as pending">✅</button>
+        </form>
+        {% else %}
+        <button type="button" class="todo-check" title="Mark as done" onclick="toggleResolution({{ item.id }})">⬜</button>
+        {% endif %}
+      </div>
       <div class="todo-body">
         <span class="todo-title">{{ item.title }}</span>
         {% if item.note %}
         <span class="todo-note">{{ item.note }}</span>
         {% endif %}
+        {% if item.resolution %}
+        <span class="todo-resolution">✏️ {{ item.resolution }}</span>
+        {% endif %}
         <div class="todo-meta">
           <span class="badge badge-{{ item.category }}">{{ item.category }}</span>
           <span class="badge badge-priority-{{ item.priority }}">{{ item.priority }}</span>
         </div>
+        <form id="resolve-form-{{ item.id }}" method="post" action="/pendientes/{{ item.id }}/toggle"
+              style="display:none; margin-top:0.5rem;">
+          <textarea name="resolution" class="form-input" rows="3"
+                    placeholder="How was this resolved?" style="width:100%; margin-bottom:0.5rem;"></textarea>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="submit" class="btn btn-primary btn-sm">Mark as done</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelResolution({{ item.id }})">Cancel</button>
+          </div>
+        </form>
       </div>
       <form method="post" action="/pendientes/{{ item.id }}/delete" style="display:contents;">
         <button type="submit" class="btn-icon btn-danger-ghost" onclick="return confirm('Delete?')" title="Delete">🗑</button>
@@ -96,4 +112,22 @@
   <p class="empty-state">No tasks. All caught up! 🎉</p>
   {% endif %}
 </div>
+
+<style>
+  .todo-resolution {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted, #8899aa);
+    font-style: italic;
+    margin-top: 0.15rem;
+  }
+</style>
+<script>
+  function toggleResolution(id) {
+    document.getElementById('resolve-form-' + id).style.display = 'block';
+  }
+  function cancelResolution(id) {
+    document.getElementById('resolve-form-' + id).style.display = 'none';
+  }
+</script>
 {% endblock %}

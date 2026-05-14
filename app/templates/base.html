@@ -19,6 +19,7 @@
       <a href="/ubicaciones" class="nav-link {% if request.url.path.startswith('/ubicaciones') %}active{% endif %}">Locations</a>
       <a href="/admin/social" class="nav-link {% if request.url.path.startswith('/admin/social') %}active{% endif %}">Social</a>
       <a href="/pendientes" class="nav-link {% if request.url.path.startswith('/pendientes') %}active{% endif %}">Tasks</a>
+      <a href="/shared" class="nav-link {% if request.url.path.startswith('/shared') %}active{% endif %}">Shared</a>
       <a href="/admin/sessions" class="nav-link {% if request.url.path.startswith('/admin/sessions') %}active{% endif %}">Sessions</a>
       <form method="post" action="/logout" style="display:inline;">
         <button type="submit" class="btn-logout">Logout</button>

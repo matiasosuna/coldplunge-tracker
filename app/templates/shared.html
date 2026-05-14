@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Shared Expenses — Cold Plunge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">🏠 Shared Expenses</h1>
+</div>
+
+<!-- Balance card -->
+<div class="section">
+  <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+    <div class="stat-card">
+      <div class="stat-label">Total pending</div>
+      <div class="stat-value">${{ "%.2f"|format(total) }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Me paid</div>
+      <div class="stat-value">${{ "%.2f"|format(me_paid) }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cousin paid</div>
+      <div class="stat-value">${{ "%.2f"|format(cousin_paid) }}</div>
+    </div>
+    <div class="stat-card {% if balance > 0 %}stat-positive{% elif balance < 0 %}stat-negative{% endif %}">
+      <div class="stat-label">Balance</div>
+      {% if balance > 0 %}
+      <div class="stat-value" style="color: var(--color-income, #4caf50);">Cousin owes ${{ "%.2f"|format(balance) }}</div>
+      {% elif balance < 0 %}
+      <div class="stat-value" style="color: var(--color-expense, #ef5350);">I owe ${{ "%.2f"|format(balance|abs) }}</div>
+      {% else %}
+      <div class="stat-value">All even ✅</div>
+      {% endif %}
+    </div>
+  </div>
+  {% if total > 0 %}
+  <div style="margin-top: 0.75rem;">
+    <form method="post" action="/shared/settle-all" onsubmit="return confirm('Mark all pending expenses as settled?')">
+      <button type="submit" class="btn btn-secondary btn-sm">Mark all as settled</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Add form -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Add expense</h2>
+  </div>
+  <form method="post" action="/shared/nuevo">
+    <div class="quick-form-grid">
+      <div class="form-group">
+        <label class="form-label">Date *</label>
+        <input type="date" name="date" class="form-input" value="{{ today }}" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Paid by *</label>
+        <select name="paid_by" class="form-input">
+          {% for p in shared_payers %}
+          <option value="{{ p }}">{{ p }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label class="form-label">Description *</label>
+        <input type="text" name="description" class="form-input" placeholder="e.g. Supermarket, March rent..." required autofocus />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select name="category" class="form-input">
+          {% for cat in shared_categories %}
+          <option value="{{ cat }}">{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount *</label>
+        <input type="number" name="amount" class="form-input" step="0.01" min="0.01" placeholder="0.00" required />
+      </div>
+    </div>
+    <div class="form-actions" style="margin-top: 0.75rem;">
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
+</div>
+
+<!-- Filters -->
+<div class="section">
+  <form method="get" action="/shared" class="filter-bar">
+    <select name="category" class="form-input form-input-sm" onchange="this.form.submit()">
+      <option value="">All categories</option>
+      {% for cat in shared_categories %}
+      <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+    <select name="payer" class="form-input form-input-sm" onchange="this.form.submit()">
+      <option value="">All payers</option>
+      {% for p in shared_payers %}
+      <option value="{{ p }}" {% if payer == p %}selected{% endif %}>{{ p }}</option>
+      {% endfor %}
+    </select>
+    <select name="settled" class="form-input form-input-sm" onchange="this.form.submit()">
+      <option value="">All</option>
+      <option value="no" {% if settled == "no" %}selected{% endif %}>Pending</option>
+      <option value="yes" {% if settled == "yes" %}selected{% endif %}>Settled</option>
+    </select>
+    {% if category or payer or settled %}
+    <a href="/shared" class="btn btn-secondary btn-sm">Clear</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- List -->
+<div class="section">
+  {% if items %}
+  <ul class="todo-list">
+    {% for expense in items %}
+    <li class="todo-item {% if expense.settled %}todo-done{% endif %}" style="align-items: flex-start;">
+      <form method="post" action="/shared/{{ expense.id }}/settle" style="display:contents;">
+        <button type="submit" class="todo-check" title="{% if expense.settled %}Mark as pending{% else %}Mark as settled{% endif %}">
+          {% if expense.settled %}✅{% else %}⬜{% endif %}
+        </button>
+      </form>
+      <div class="todo-body">
+        <span class="todo-title">{{ expense.description }}</span>
+        <span class="todo-note">{{ expense.date.strftime('%b %d, %Y') }} · Paid by <strong>{{ expense.paid_by }}</strong> · Each owes ${{ "%.2f"|format(expense.amount / 2) }}</span>
+        <div class="todo-meta">
+          <span class="badge">{{ expense.category }}</span>
+          <span class="badge" style="font-size:0.85rem; font-weight:600;">${{ "%.2f"|format(expense.amount) }}</span>
+          {% if expense.settled %}<span class="badge" style="opacity:0.6;">settled</span>{% endif %}
+        </div>
+      </div>
+      <form method="post" action="/shared/{{ expense.id }}/delete" style="display:contents;">
+        <button type="submit" class="btn-icon btn-danger-ghost" onclick="return confirm('Delete?')" title="Delete">🗑</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty-state">No expenses yet.</p>
+  {% endif %}
+</div>
+
+<script>
+  // Default date input to today
+  document.addEventListener('DOMContentLoaded', function() {
+    const d = document.querySelector('input[type="date"]');
+    if (d && !d.value) d.value = new Date().toISOString().split('T')[0];
+  });
+</script>
+{% endblock %}

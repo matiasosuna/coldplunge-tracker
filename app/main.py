@@ -15,7 +15,7 @@ from sqlalchemy import func, extract
 
 from app.database import engine, get_db
 from app import models
-from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto, TodoItem, Session as IceSession, SessionSignup
+from app.models import Transaction, Location, INCOME_CATEGORIES, EXPENSE_CATEGORIES, SocialProfile, SocialLink, SocialPhoto, TodoItem, Session as IceSession, SessionSignup, SharedExpense, SHARED_CATEGORIES, SHARED_PAYERS
 from app.auth import (
     verify_password, create_session_token, get_current_user,
     COOKIE_NAME, REMEMBER_ME_DAYS
@@ -30,6 +30,8 @@ def run_migrations():
         migrations = [
             "ALTER TABLE social_links ADD COLUMN IF NOT EXISTS is_donation BOOLEAN DEFAULT FALSE",
             "ALTER TABLE todo_items ADD COLUMN IF NOT EXISTS note VARCHAR(1000)",
+            "ALTER TABLE todo_items ADD COLUMN IF NOT EXISTS resolution VARCHAR(2000)",
+            "CREATE TABLE IF NOT EXISTS shared_expenses (id INTEGER PRIMARY KEY, date DATE NOT NULL, description VARCHAR(300) NOT NULL, category VARCHAR(50) NOT NULL DEFAULT 'Other', amount FLOAT NOT NULL, paid_by VARCHAR(50) NOT NULL, settled BOOLEAN DEFAULT FALSE, created_at DATETIME)",
             "ALTER TABLE sessions ADD COLUMN IF NOT EXISTS notes VARCHAR(500)",
         ]
         for sql in migrations:
@@ -653,6 +655,7 @@ async def nuevo_pendiente(
 async def toggle_pendiente(
     request: Request,
     item_id: int,
+    resolution: str = Form(default=""),
     db: Session = Depends(get_db),
 ):
     if not get_current_user(request):
@@ -660,6 +663,10 @@ async def toggle_pendiente(
     item = db.query(TodoItem).filter(TodoItem.id == item_id).first()
     if item:
         item.done = not item.done
+        if item.done and resolution.strip():
+            item.resolution = resolution.strip()
+        elif not item.done:
+            item.resolution = None
         db.commit()
     return RedirectResponse(url="/pendientes", status_code=302)
 
@@ -909,3 +916,117 @@ async def public_cancel_signup(
         db.delete(signup)
         db.commit()
     return RedirectResponse(url=f"/sesion/{session_id}", status_code=302)
+
+# ---------------------------------------------------------------------------
+# Shared expenses
+# ---------------------------------------------------------------------------
+
+@app.get("/shared", response_class=HTMLResponse)
+async def shared_page(
+    request: Request,
+    category: str = "",
+    payer: str = "",
+    settled: str = "",
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    q = db.query(SharedExpense)
+    if category:
+        q = q.filter(SharedExpense.category == category)
+    if payer:
+        q = q.filter(SharedExpense.paid_by == payer)
+    if settled == "yes":
+        q = q.filter(SharedExpense.settled == True)
+    elif settled == "no":
+        q = q.filter(SharedExpense.settled == False)
+    items = q.order_by(SharedExpense.date.desc()).all()
+
+    # Balance calculation (unsettled only)
+    unsettled = db.query(SharedExpense).filter(SharedExpense.settled == False).all()
+    total = sum(e.amount for e in unsettled)
+    me_paid = sum(e.amount for e in unsettled if e.paid_by == "Me")
+    cousin_paid = sum(e.amount for e in unsettled if e.paid_by == "Cousin")
+    each_owes = total / 2
+    # positive = cousin owes me; negative = I owe cousin
+    balance = me_paid - each_owes
+
+    return tr(request, "shared.html", {
+        "items": items,
+        "total": total,
+        "me_paid": me_paid,
+        "cousin_paid": cousin_paid,
+        "balance": balance,
+        "shared_categories": SHARED_CATEGORIES,
+        "shared_payers": SHARED_PAYERS,
+        "category": category,
+        "payer": payer,
+        "settled": settled,
+    })
+
+
+@app.post("/shared/nuevo")
+async def nuevo_shared(
+    request: Request,
+    date: str = Form(...),
+    description: str = Form(...),
+    category: str = Form(...),
+    amount: float = Form(...),
+    paid_by: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    from datetime import date as date_type
+    expense = SharedExpense(
+        date=date_type.fromisoformat(date),
+        description=description.strip(),
+        category=category,
+        amount=amount,
+        paid_by=paid_by,
+    )
+    db.add(expense)
+    db.commit()
+    return RedirectResponse(url="/shared", status_code=302)
+
+
+@app.post("/shared/{expense_id}/settle")
+async def settle_shared(
+    request: Request,
+    expense_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    expense = db.query(SharedExpense).filter(SharedExpense.id == expense_id).first()
+    if expense:
+        expense.settled = not expense.settled
+        db.commit()
+    return RedirectResponse(url="/shared", status_code=302)
+
+
+@app.post("/shared/{expense_id}/delete")
+async def delete_shared(
+    request: Request,
+    expense_id: int,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    expense = db.query(SharedExpense).filter(SharedExpense.id == expense_id).first()
+    if expense:
+        db.delete(expense)
+        db.commit()
+    return RedirectResponse(url="/shared", status_code=302)
+
+
+@app.post("/shared/settle-all")
+async def settle_all_shared(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    if not get_current_user(request):
+        return auth_redirect()
+    db.query(SharedExpense).filter(SharedExpense.settled == False).update({"settled": True})
+    db.commit()
+    return RedirectResponse(url="/shared", status_code=302)
