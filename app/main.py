@@ -711,7 +711,7 @@ async def admin_create_session(
     session_date: str = Form(...),
     time: str = Form(...),
     location: str = Form("My Khe Beach"),
-    price: str = Form("150,000 VND"),
+    price: str = Form("$10"),
     max_spots: int = Form(10),
     access_password: str = Form(...),
     notes: Optional[str] = Form(None),

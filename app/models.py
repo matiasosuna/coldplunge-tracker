@@ -119,7 +119,7 @@ class Session(Base):
     date = Column(Date, nullable=False)
     time = Column(String(10), nullable=False)  # "09:00"
     location = Column(String(200), default="My Khe Beach")
-    price = Column(String(50), default="150,000 VND")
+    price = Column(String(50), default="$10")
     max_spots = Column(Integer, default=10)
     access_password = Column(String(200), nullable=False)
     notes = Column(String(500), nullable=True)
