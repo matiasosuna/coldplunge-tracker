@@ -3,229 +3,278 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ice Bath Recovery Da Nang — Cold plunge sessions on the beach. Boost recovery, reduce inflammation, and build mental resilience." />
+  <meta name="description" content="Guided ice bath sessions in Da Nang, Vietnam. Boost recovery, sharpen your mind, build resilience." />
   <title>Ice Bath Recovery Da Nang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="/static/landing.css" />
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ── NAV ─────────────────────────────────── -->
 <nav class="site-nav">
-  <div class="site-nav-brand">
-    ❄️ <span>Ice Bath</span> Recovery Da Nang
+  <div class="nav-brand">
+    <div class="nav-brand-icon">❄️</div>
+    Ice Bath Recovery <span style="color:var(--muted);font-weight:400;margin-left:0.25rem;">Da Nang</span>
   </div>
-  <div class="site-nav-links">
+  <div class="nav-links">
     <a href="#benefits">Benefits</a>
+    <a href="#how">How it works</a>
     <a href="#events">Sessions</a>
     <a href="#connect">Connect</a>
-    {% if upcoming %}
-    <a href="#events" class="btn-nav">Book a session</a>
-    {% endif %}
+    <a href="#events" class="nav-cta">Book a session</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-img-bg"></div>
-  <div class="hero-placeholder"></div>
+<!-- ── HERO ─────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">📍 Da Nang, Vietnam</div>
-    <h1>Cold water.<br><em>Clear mind.</em><br>Stronger body.</h1>
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-dot"></div>
+      Da Nang, Vietnam &nbsp;·&nbsp; Guided Sessions
+    </div>
+
+    <h1>
+      The cold is<br>
+      <span class="gradient-word">the practice.</span>
+    </h1>
+
     <p class="hero-sub">
       Guided ice bath sessions on the shores of Da Nang.
-      Tap into the science of cold exposure to recover faster, think sharper, and feel more alive.
+      Reduce inflammation, sharpen focus, and build the mental resilience that carries over into everything else.
     </p>
+
     <div class="hero-actions">
-      <a href="#events" class="btn-primary-lg">View upcoming sessions</a>
-      <a href="#benefits" class="btn-outline-lg">Learn more</a>
+      <a href="#events" class="btn-ice">
+        View upcoming sessions
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#benefits" class="btn-ghost">
+        Learn more
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">2<span>°C</span></div>
+        <div class="hero-stat-label">Water temp</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3<span>min</span></div>
+        <div class="hero-stat-label">Average immersion</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">300<span>%</span></div>
+        <div class="hero-stat-label">Norepinephrine boost</div>
+      </div>
     </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
 </section>
 
-<!-- BENEFITS -->
-<section class="benefits" id="benefits">
-  <div class="section-inner">
-    <div class="section-label">Why cold?</div>
-    <h2 class="section-title">What cold exposure does<br>for your body & mind</h2>
-    <p class="section-desc">Used by athletes, biohackers, and wellness practitioners worldwide — cold immersion is one of the most effective recovery tools available.</p>
+<!-- ── BENEFITS ─────────────────────────────── -->
+<section class="s" id="benefits">
+  <div class="s-inner">
+    <div class="s-label">Why cold exposure</div>
+    <h2 class="s-title">What happens when<br>you enter the ice</h2>
+    <p class="s-desc">Cold immersion is one of the most researched wellness tools available. Here's what the science shows.</p>
+
     <div class="benefits-grid">
       <div class="benefit-card">
-        <div class="benefit-icon">⚡</div>
-        <h3>Faster Recovery</h3>
-        <p>Reduce muscle soreness and inflammation after training. Get back to peak performance sooner.</p>
+        <div class="benefit-icon-wrap">⚡</div>
+        <h3>Faster Muscle Recovery</h3>
+        <p>Cold constricts blood vessels and reduces metabolic waste build-up, cutting soreness and helping you train harder, more often.</p>
       </div>
       <div class="benefit-card">
-        <div class="benefit-icon">🧠</div>
+        <div class="benefit-icon-wrap">🧠</div>
         <h3>Mental Clarity</h3>
-        <p>Cold exposure triggers a norepinephrine release that sharpens focus and lifts mood for hours.</p>
+        <p>A single immersion triggers up to a 300% spike in norepinephrine — the neurotransmitter behind focus, mood, and alertness.</p>
       </div>
       <div class="benefit-card">
-        <div class="benefit-icon">🛡️</div>
-        <h3>Stronger Immunity</h3>
-        <p>Regular cold immersion has been linked to increased white blood cell production and resilience.</p>
+        <div class="benefit-icon-wrap">🔥</div>
+        <h3>Metabolic Activation</h3>
+        <p>Cold activates brown adipose tissue, increasing caloric expenditure and improving insulin sensitivity over time.</p>
       </div>
       <div class="benefit-card">
-        <div class="benefit-icon">🔥</div>
-        <h3>Metabolic Boost</h3>
-        <p>Activate brown fat tissue and increase caloric burn as your body works to restore core temperature.</p>
+        <div class="benefit-icon-wrap">🛡️</div>
+        <h3>Immune Resilience</h3>
+        <p>Regular cold exposure has been associated with higher white blood cell counts and reduced sick days in multiple studies.</p>
       </div>
       <div class="benefit-card">
-        <div class="benefit-icon">🧘</div>
-        <h3>Stress Resilience</h3>
-        <p>Learn to stay calm under pressure. Cold is a training ground for your nervous system.</p>
+        <div class="benefit-icon-wrap">🧘</div>
+        <h3>Stress Hardening</h3>
+        <p>The cold teaches controlled breathing and calm under pressure — a skill that transfers directly to everyday life.</p>
       </div>
       <div class="benefit-card">
-        <div class="benefit-icon">😴</div>
-        <h3>Better Sleep</h3>
-        <p>Lower your core temperature before bed and improve the quality and depth of your rest.</p>
+        <div class="benefit-icon-wrap">😴</div>
+        <h3>Deeper Sleep</h3>
+        <p>Post-immersion temperature rebound signals the brain for sleep. Most people report noticeably better rest the same night.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-inner">
-    <div class="section-label">How it works</div>
-    <h2 class="section-title">Your first session,<br>step by step</h2>
-    <div class="steps">
+<!-- ── HOW IT WORKS ──────────────────────────── -->
+<section class="s s-alt" id="how">
+  <div class="s-inner">
+    <div class="s-label">The process</div>
+    <h2 class="s-title">Your session,<br>step by step</h2>
+    <div class="steps-wrap">
       <div class="step">
-        <div class="step-num">1</div>
-        <h3>Book your spot</h3>
-        <p>Sessions are small groups. Reserve your place online in advance — spots fill up fast.</p>
+        <div class="step-num">01</div>
+        <h3>Reserve your spot</h3>
+        <p>Sessions are intentionally small. Book online in advance — this isn't the kind of experience you want to miss because it filled up.</p>
       </div>
       <div class="step">
-        <div class="step-num">2</div>
-        <h3>Show up & breathe</h3>
-        <p>We start with a brief breathwork warm-up to prepare your nervous system for the cold.</p>
+        <div class="step-num">02</div>
+        <h3>Breathwork warm-up</h3>
+        <p>We open with guided breathing to regulate your nervous system and set the right mindset before you touch the water.</p>
       </div>
       <div class="step">
-        <div class="step-num">3</div>
-        <h3>Enter the water</h3>
-        <p>Guided immersion at your own pace. Our facilitator stays with you throughout the session.</p>
+        <div class="step-num">03</div>
+        <h3>Guided immersion</h3>
+        <p>Enter the ice at your own pace with a facilitator present. No pressure. The only rule is you stay present.</p>
       </div>
       <div class="step">
-        <div class="step-num">4</div>
-        <h3>Warm up & reflect</h3>
-        <p>Natural warm-up, group debrief, and the unmistakable feeling of having done something hard.</p>
+        <div class="step-num">04</div>
+        <h3>Natural warm-up</h3>
+        <p>No hot showers. We let the body do the work — and debrief as a group while the warmth comes back on its own.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EVENTS -->
-<section class="events" id="events">
-  <div class="section-inner">
-    <div class="section-label">Upcoming sessions</div>
-    <h2 class="section-title">Join the next plunge</h2>
-    <p class="section-desc">All sessions are guided and beginner-friendly. No experience needed.</p>
+<!-- ── EVENTS ────────────────────────────────── -->
+<section class="s" id="events">
+  <div class="s-inner">
+    <div class="s-label">Upcoming sessions</div>
+    <h2 class="s-title">Join the next plunge</h2>
+    <p class="s-desc">All sessions are beginner-friendly and fully guided. No experience or special gear needed.</p>
+
     <div class="events-grid">
       {% if upcoming %}
         {% for sess in upcoming %}
+        {% set spots_left = sess.max_spots - sess.signups|length %}
         <div class="event-card">
-          <div class="event-date-badge">
-            📅 {{ sess.date.strftime('%b %d, %Y') }}
+          <div class="event-tag">
+            📅 {{ sess.date.strftime('%B %d, %Y') }}
           </div>
           <h3>{{ sess.title }}</h3>
-          <div class="event-meta">
-            <span>🕐 {{ sess.time }}</span>
-            <span>📍 {{ sess.location }}</span>
-            <span>💵 {{ sess.price }}</span>
+          <div class="event-details">
+            <div class="event-detail">
+              <span class="event-detail-icon">🕐</span> {{ sess.time }}
+            </div>
+            <div class="event-detail">
+              <span class="event-detail-icon">📍</span> {{ sess.location }}
+            </div>
+            <div class="event-detail">
+              <span class="event-detail-icon">💵</span> {{ sess.price }} per person
+            </div>
           </div>
-          {% set spots_left = sess.max_spots - sess.signups|length %}
-          <div class="event-spots {% if spots_left <= 3 %}few{% endif %}">
+          <div class="event-footer">
+            <span class="spots-indicator {% if spots_left == 0 %}full{% elif spots_left <= 3 %}few{% endif %}">
+              {% if spots_left == 0 %}
+                Fully booked
+              {% elif spots_left == 1 %}
+                ⚠️ Last spot
+              {% elif spots_left <= 3 %}
+                ⚠️ {{ spots_left }} spots left
+              {% else %}
+                {{ spots_left }} spots available
+              {% endif %}
+            </span>
             {% if spots_left > 0 %}
-              {{ spots_left }} spot{{ 's' if spots_left != 1 }} available
-            {% else %}
-              Fully booked
+            <a href="/sesion/{{ sess.id }}" class="btn-book">
+              Reserve →
+            </a>
             {% endif %}
           </div>
-          {% if spots_left > 0 %}
-          <a href="/sesion/{{ sess.id }}" class="btn-event">Reserve my spot →</a>
-          {% endif %}
         </div>
         {% endfor %}
       {% else %}
       <div class="no-events">
-        <p>No upcoming sessions scheduled right now.<br>Follow us on Instagram to be the first to know.</p>
+        <p style="font-size:2rem;margin-bottom:1rem;">🧊</p>
+        <p>No sessions scheduled right now.<br>Follow us on Instagram to hear first when the next one drops.</p>
       </div>
       {% endif %}
     </div>
   </div>
 </section>
 
-<!-- PHOTOS -->
-<section class="photo-section" id="gallery">
-  <div class="section-inner">
-    <div class="section-label">In the water</div>
-    <h2 class="section-title">What to expect</h2>
-    <div class="photo-grid">
-      <div class="photo-placeholder large">Photo coming soon</div>
-      <div class="photo-placeholder">Photo</div>
-      <div class="photo-placeholder">Photo</div>
-      <div class="photo-placeholder">Photo</div>
-      <div class="photo-placeholder">Photo</div>
+<!-- ── GALLERY ───────────────────────────────── -->
+<section class="s s-alt" id="gallery">
+  <div class="s-inner">
+    <div class="s-label">In the water</div>
+    <h2 class="s-title">What to expect</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item span-2">Coming soon</div>
+      <div class="gallery-item">Photo</div>
+      <div class="gallery-item">Photo</div>
+      <div class="gallery-item span-col">Photo</div>
+      <div class="gallery-item">Photo</div>
+      <div class="gallery-item">Photo</div>
     </div>
   </div>
 </section>
 
-<!-- CONNECT -->
-<section class="socials" id="connect">
-  <div class="section-inner">
-    <div class="section-label">Stay connected</div>
-    <h2 class="section-title">Find us online</h2>
-    <p class="section-desc">Follow along for session announcements, cold exposure tips, and community updates.</p>
+<!-- ── CONNECT ───────────────────────────────── -->
+<section class="s" id="connect">
+  <div class="s-inner">
+    <div class="s-label">Stay connected</div>
+    <h2 class="s-title">Find us online</h2>
+    <p class="s-desc">Follow for session announcements, cold exposure tips, and dispatches from the community.</p>
+
     <div class="socials-grid">
       {% if links %}
         {% for link in links %}
-        <a href="{{ link.url }}" target="_blank" rel="noopener" class="social-link-card">
-          <div class="social-link-icon">
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="social-card">
+          <div class="social-icon">
             {% if link.platform == 'instagram' %}📸
             {% elif link.platform == 'whatsapp' %}💬
             {% elif link.platform == 'tiktok' %}🎵
             {% elif link.platform == 'youtube' %}▶️
             {% else %}🔗{% endif %}
           </div>
-          <div class="social-link-info">
+          <div class="social-info">
             <strong>{{ link.label }}</strong>
             <span>{{ link.platform | capitalize }}</span>
           </div>
         </a>
         {% endfor %}
       {% else %}
-      <div class="social-link-card">
-        <div class="social-link-icon">📸</div>
-        <div class="social-link-info">
-          <strong>Instagram</strong>
-          <span>Coming soon</span>
+        <div class="social-card" style="opacity:0.5;pointer-events:none;">
+          <div class="social-icon">📸</div>
+          <div class="social-info"><strong>Instagram</strong><span>Coming soon</span></div>
         </div>
-      </div>
-      <div class="social-link-card">
-        <div class="social-link-icon">💬</div>
-        <div class="social-link-info">
-          <strong>WhatsApp Group</strong>
-          <span>Coming soon</span>
+        <div class="social-card" style="opacity:0.5;pointer-events:none;">
+          <div class="social-icon">💬</div>
+          <div class="social-info"><strong>WhatsApp Group</strong><span>Coming soon</span></div>
         </div>
-      </div>
       {% endif %}
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ── CTA ──────────────────────────────────── -->
 <section class="cta">
   <div class="cta-box">
     <h2>Ready to take the plunge?</h2>
-    <p>Join a small group of people doing something most people only talk about.</p>
-    <a href="#events" class="btn-primary-lg">See available sessions</a>
+    <p>
+      Most people think about it. A few actually do it.<br>
+      Come be one of them.
+    </p>
+    <a href="#events" class="btn-ice">See available sessions →</a>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ── FOOTER ────────────────────────────────── -->
 <footer class="site-footer">
-  <p>© {{ today.year }} Ice Bath Recovery Da Nang &nbsp;·&nbsp; Da Nang, Vietnam</p>
+  <div class="footer-brand">❄️ Ice Bath Recovery Da Nang · {{ today.year }}</div>
+  <div class="footer-links">
+    <a href="#benefits">Benefits</a>
+    <a href="#events">Sessions</a>
+    <a href="#connect">Connect</a>
+  </div>
 </footer>
 
 </body>
