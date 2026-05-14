@@ -13,7 +13,7 @@
       <span class="nav-title">Cold Plunge</span>
     </div>
     <div class="nav-links">
-      <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">Home</a>
+      <a href="/dashboard" class="nav-link {% if request.url.path == '/dashboard' %}active{% endif %}">Home</a>
       <a href="/finanzas" class="nav-link {% if request.url.path == '/finanzas' %}active{% endif %}">Finances</a>
       <a href="/transacciones" class="nav-link {% if request.url.path.startswith('/transacciones') %}active{% endif %}">Transactions</a>
       <a href="/ubicaciones" class="nav-link {% if request.url.path.startswith('/ubicaciones') %}active{% endif %}">Locations</a>

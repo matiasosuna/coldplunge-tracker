@@ -80,7 +80,7 @@ def get_active_locations(db: Session):
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     if get_current_user(request):
-        return RedirectResponse(url="/", status_code=302)
+        return RedirectResponse(url="/dashboard", status_code=302)
     return tr(request, "login.html", {"error": None})
 
 
@@ -92,7 +92,7 @@ async def login_post(
 ):
     if verify_password(password):
         token = create_session_token()
-        response = RedirectResponse(url="/", status_code=302)
+        response = RedirectResponse(url="/dashboard", status_code=302)
         remember = recordarme is not None
         max_age = REMEMBER_ME_DAYS * 24 * 3600 if remember else None
         response.set_cookie(
@@ -114,10 +114,34 @@ async def logout():
 
 
 # ---------------------------------------------------------------------------
-# Dashboard
+# Public landing page
 # ---------------------------------------------------------------------------
 
 @app.get("/", response_class=HTMLResponse)
+async def public_home(request: Request, db: Session = Depends(get_db)):
+    today = date.today()
+    upcoming = (
+        db.query(IceSession)
+        .filter(IceSession.active == True, IceSession.date >= today)
+        .order_by(IceSession.date)
+        .limit(4)
+        .all()
+    )
+    profile = db.query(SocialProfile).first()
+    links = db.query(SocialLink).filter(SocialLink.active == True).order_by(SocialLink.order).all()
+    return tr(request, "landing.html", {
+        "upcoming": upcoming,
+        "profile": profile,
+        "links": links,
+        "today": today,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Dashboard
+# ---------------------------------------------------------------------------
+
+@app.get("/dashboard", response_class=HTMLResponse)
 async def home(request: Request, db: Session = Depends(get_db)):
     if not get_current_user(request):
         return auth_redirect()
