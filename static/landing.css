@@ -239,6 +239,56 @@ a { color: inherit; text-decoration: none; }
 
 .social-link-row:hover .social-link-arrow { color: var(--ice); transform: translateX(3px); }
 
+/* ── BENEFITS LIST ── */
+.benefits-list { margin-top: 2.5rem; }
+
+.benefit-row {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 1.5rem; padding: 1.75rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.benefit-row:first-child { border-top: 1px solid var(--border); }
+.benefit-row:hover { border-color: rgba(255,255,255,0.12); }
+
+.benefit-num {
+  font-family: 'Sora', sans-serif; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.1em; color: var(--ice); padding-top: 0.2rem;
+}
+
+.benefit-body h3 {
+  font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
+  color: #fff; margin-bottom: 0.4rem;
+}
+
+.benefit-body p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; max-width: 560px; }
+
+/* ── PHOTO GRID ── */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 220px 220px;
+  gap: 0.5rem; margin-top: 2.5rem;
+}
+
+.photo-item {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+
+.photo-item::after {
+  content: 'Photo coming soon';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dim);
+}
+
+.photo-item.large { grid-column: span 2; grid-row: span 2; }
+.photo-item.wide  { grid-column: span 2; }
+
 /* ── FOOTER ── */
 .site-footer {
   border-top: 1px solid var(--border);

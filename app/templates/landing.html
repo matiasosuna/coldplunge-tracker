@@ -11,6 +11,40 @@
 </head>
 <body>
 
+{% macro social_icon(platform) %}
+  {% if platform == 'instagram' %}
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="ig-{{ loop.index }}" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f09433"/><stop offset="25%" style="stop-color:#e6683c"/>
+      <stop offset="50%" style="stop-color:#dc2743"/><stop offset="75%" style="stop-color:#cc2366"/>
+      <stop offset="100%" style="stop-color:#bc1888"/>
+    </linearGradient></defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-{{ loop.index }})"/>
+    <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+    <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+  </svg>
+  {% elif platform == 'whatsapp' %}
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="#25D366"/>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/>
+  </svg>
+  {% elif platform == 'tiktok' %}
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="#010101"/>
+    <path d="M16.6 8.82a4.28 4.28 0 002.14.58V7.26a2.14 2.14 0 01-2.14-2.14h-2.14v8.56a2.14 2.14 0 11-2.14-2.14v-2.14a4.28 4.28 0 104.28 4.28V8.82z" fill="white"/>
+  </svg>
+  {% elif platform == 'youtube' %}
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="#FF0000"/>
+    <polygon points="10,8.5 10,15.5 16,12" fill="white"/>
+  </svg>
+  {% else %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8">
+    <circle cx="12" cy="12" r="9"/><path d="M12 3a15.3 15.3 0 010 18M3 12h18"/>
+  </svg>
+  {% endif %}
+{% endmacro %}
+
 <nav class="site-nav">
   <div class="nav-brand">
     <div class="nav-brand-icon">❄️</div>
@@ -18,26 +52,24 @@
   </div>
   <div class="nav-tabs" role="tablist">
     <button class="nav-tab active" onclick="showTab('sessions')" role="tab">Sessions</button>
-    <button class="nav-tab" onclick="showTab('connect')" role="tab">Connect</button>
+    <button class="nav-tab" onclick="showTab('benefits')" role="tab">Benefits</button>
+    <button class="nav-tab" onclick="showTab('photos')" role="tab">Photos</button>
   </div>
-  <a href="#sessions-list" class="nav-cta" onclick="showTab('sessions')">
+  <a href="#" class="nav-cta" onclick="showTab('sessions'); return false;">
     Book now
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
   </a>
 </nav>
 
-<!-- TAB CONTENT -->
 <div class="tab-body">
 
-  <!-- SESSIONS -->
+  <!-- ── SESSIONS ── -->
   <div class="tab-pane active" id="tab-sessions">
-    <div class="sessions-header">
-      <h1 class="page-headline">Ice Bath Recovery<br><span class="headline-location">Da Nang</span></h1>
-      <p class="page-intro">Guided cold plunge sessions on the shores of Da Nang. Small groups, no experience needed.</p>
-      <div class="tab-label" style="margin-top: 3rem;">Upcoming sessions</div>
-    </div>
+    <h1 class="page-headline">Ice Bath Recovery<br><span class="headline-location">Da Nang</span></h1>
+    <p class="page-intro">Guided cold plunge sessions on the shores of Da Nang. Small groups, no experience needed.</p>
 
-    <div class="session-list" id="sessions-list">
+    <div class="tab-label" style="margin-top:3rem;">Upcoming sessions</div>
+    <div class="session-list">
       {% if upcoming %}
         {% for sess in upcoming %}
         {% set spots_left = sess.max_spots - sess.signups|length %}
@@ -65,8 +97,7 @@
               {% if spots_left == 0 %}Fully booked
               {% elif spots_left == 1 %}Last spot
               {% elif spots_left <= 3 %}{{ spots_left }} spots left
-              {% else %}{{ spots_left }} spots
-              {% endif %}
+              {% else %}{{ spots_left }} spots{% endif %}
             </span>
             {% if spots_left > 0 %}
             <a href="/sesion/{{ sess.id }}" class="btn-reserve">Reserve →</a>
@@ -80,61 +111,15 @@
       </div>
       {% endif %}
     </div>
-  </div>
 
-  <!-- CONNECT -->
-  <div class="tab-pane" id="tab-connect">
-    <div class="sessions-header">
-      <div class="tab-label">Find us</div>
-      <h2 class="tab-title">Stay in the loop</h2>
-      <p class="tab-desc">Session drops, cold exposure tips, and community updates.</p>
-    </div>
-
+    <!-- Social links inline -->
+    <div class="tab-label" style="margin-top:3.5rem;">Find us</div>
     <div class="connect-wrap">
       {% if links %}
         {% for link in links %}
         <a href="{{ link.url }}" target="_blank" rel="noopener" class="social-link-row">
           <div class="social-link-left">
-            <div class="social-svg">
-              {% if link.platform == 'instagram' %}
-              <!-- Instagram -->
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:#f09433"/>
-                  <stop offset="25%" style="stop-color:#e6683c"/>
-                  <stop offset="50%" style="stop-color:#dc2743"/>
-                  <stop offset="75%" style="stop-color:#cc2366"/>
-                  <stop offset="100%" style="stop-color:#bc1888"/>
-                </linearGradient></defs>
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="url(#ig)"/>
-                <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
-                <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
-              </svg>
-              {% elif link.platform == 'whatsapp' %}
-              <!-- WhatsApp -->
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="20" height="20" rx="5" fill="#25D366"/>
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/>
-              </svg>
-              {% elif link.platform == 'tiktok' %}
-              <!-- TikTok -->
-              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="20" height="20" rx="5" fill="#000"/>
-                <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 015.82 9.5v6.82A4.278 4.278 0 0010.1 20.6a4.278 4.278 0 004.28-4.28V9.5a4.278 4.278 0 004.28 4.28v-2.14a2.14 2.14 0 01-2.14-2.14V5.82h-2.14" fill="white"/>
-              </svg>
-              {% elif link.platform == 'youtube' %}
-              <!-- YouTube -->
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="20" height="20" rx="5" fill="#FF0000"/>
-                <polygon points="10,8.5 10,15.5 16,12" fill="white"/>
-              </svg>
-              {% else %}
-              <!-- Generic link -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="12" cy="12" r="9"/><path d="M12 3a15.3 15.3 0 010 18M3 12h18"/>
-              </svg>
-              {% endif %}
-            </div>
+            <div class="social-svg">{{ social_icon(link.platform) }}</div>
             <div class="social-link-text">
               <strong>{{ link.label }}</strong>
               <span>{{ link.platform | capitalize }}</span>
@@ -148,11 +133,10 @@
           <div class="social-link-left">
             <div class="social-svg">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="ig2" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:#f09433"/>
-                  <stop offset="100%" style="stop-color:#bc1888"/>
+                <defs><linearGradient id="ig-ph" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#f09433"/><stop offset="100%" style="stop-color:#bc1888"/>
                 </linearGradient></defs>
-                <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig2)"/>
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-ph)"/>
                 <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
                 <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
               </svg>
@@ -177,6 +161,64 @@
     </div>
   </div>
 
+  <!-- ── BENEFITS ── -->
+  <div class="tab-pane" id="tab-benefits">
+    <h2 class="page-headline" style="font-size:clamp(1.8rem,4vw,2.8rem);">What cold does<br><span class="headline-location">to your body</span></h2>
+    <p class="page-intro">Cold immersion is one of the most researched wellness tools available.</p>
+
+    <div class="benefits-list">
+      <div class="benefit-row">
+        <div class="benefit-num">01</div>
+        <div class="benefit-body">
+          <h3>Faster muscle recovery</h3>
+          <p>Cold constricts blood vessels and clears metabolic waste, cutting soreness so you can train harder and more often.</p>
+        </div>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-num">02</div>
+        <div class="benefit-body">
+          <h3>Mental clarity &amp; mood</h3>
+          <p>A single session triggers up to a 300% spike in norepinephrine — the neurotransmitter behind focus, drive, and mood.</p>
+        </div>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-num">03</div>
+        <div class="benefit-body">
+          <h3>Stress resilience</h3>
+          <p>The cold is a training ground for your nervous system. Learn to stay calm under pressure — it carries over into life.</p>
+        </div>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-num">04</div>
+        <div class="benefit-body">
+          <h3>Metabolic activation</h3>
+          <p>Cold activates brown adipose tissue, increasing caloric burn and improving insulin sensitivity over time.</p>
+        </div>
+      </div>
+      <div class="benefit-row">
+        <div class="benefit-num">05</div>
+        <div class="benefit-body">
+          <h3>Deeper sleep</h3>
+          <p>Post-immersion temperature rebound signals the brain for rest. Most people report noticeably better sleep the same night.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHOTOS ── -->
+  <div class="tab-pane" id="tab-photos">
+    <h2 class="page-headline" style="font-size:clamp(1.8rem,4vw,2.8rem);">In the<br><span class="headline-location">water</span></h2>
+    <p class="page-intro">Photos coming soon — follow us on Instagram in the meantime.</p>
+
+    <div class="photo-grid">
+      <div class="photo-item large"></div>
+      <div class="photo-item"></div>
+      <div class="photo-item"></div>
+      <div class="photo-item wide"></div>
+      <div class="photo-item"></div>
+    </div>
+  </div>
+
 </div><!-- /tab-body -->
 
 <footer class="site-footer">
@@ -184,18 +226,19 @@
 </footer>
 
 <script>
+  const TAB_MAP = { sessions: 0, benefits: 1, photos: 2 };
+
   function showTab(name) {
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
+    const idx = TAB_MAP[name];
     const tabs = document.querySelectorAll('.nav-tab');
-    const map = { sessions: 0, connect: 1 };
-    if (tabs[map[name]]) tabs[map[name]].classList.add('active');
+    if (tabs[idx] !== undefined) tabs[idx].classList.add('active');
   }
 
-  // activate tab from URL hash
-  const hash = location.hash.replace('#','');
-  if (hash === 'connect') showTab('connect');
+  const hash = location.hash.replace('#', '');
+  if (TAB_MAP[hash] !== undefined) showTab(hash);
 </script>
 
 </body>
