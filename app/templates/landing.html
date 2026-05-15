@@ -59,7 +59,16 @@
     Book now
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
   </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-menu-tab active" id="mtab-sessions" onclick="showTab('sessions'); closeMenu()">Sessions</button>
+  <button class="mobile-menu-tab" id="mtab-benefits" onclick="showTab('benefits'); closeMenu()">Benefits</button>
+  <button class="mobile-menu-tab" id="mtab-photos" onclick="showTab('photos'); closeMenu()">Photos</button>
+</div>
 
 <div class="tab-body">
 
@@ -231,10 +240,25 @@
   function showTab(name) {
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mobile-menu-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
-    const idx = TAB_MAP[name];
     const tabs = document.querySelectorAll('.nav-tab');
+    const idx = TAB_MAP[name];
     if (tabs[idx] !== undefined) tabs[idx].classList.add('active');
+    const mtab = document.getElementById('mtab-' + name);
+    if (mtab) mtab.classList.add('active');
+  }
+
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+
+  function closeMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
   }
 
   const hash = location.hash.replace('#', '');
