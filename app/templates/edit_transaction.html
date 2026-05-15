@@ -2,8 +2,10 @@
 {% block title %}Edit transaction — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">Edit transaction</h1>
+  <a href="/transacciones" class="btn btn-secondary btn-sm">← Back</a>
 </div>
 
 <div class="section">
@@ -57,6 +59,9 @@
   </form>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
 const incomeCategories = {{ income_categories | tojson }};
 const expenseCategories = {{ expense_categories | tojson }};
@@ -68,8 +73,7 @@ function updateCategories(tipoSelect, categoryId) {
   catSelect.innerHTML = '';
   cats.forEach(c => {
     const opt = document.createElement('option');
-    opt.value = c;
-    opt.textContent = c;
+    opt.value = c; opt.textContent = c;
     if (c === currentVal) opt.selected = true;
     catSelect.appendChild(opt);
   });

@@ -4,168 +4,111 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ sess.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" />
   <link rel="stylesheet" href="/static/style.css" />
   <style>
-    .session-body {
-      background: linear-gradient(160deg, #0d1b2a 0%, #0a2540 60%, #0d2137 100%);
+    body {
+      background: var(--bg);
+      display: block;
       min-height: 100vh;
+      position: relative;
+    }
+    body::after {
+      content: '';
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse 55% 45% at 15% 25%, rgba(56,189,248,0.1) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 85% 15%, rgba(129,140,248,0.07) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
     }
     .session-page {
-      max-width: 480px;
-      margin: 0 auto;
+      position: relative; z-index: 1;
+      max-width: 480px; margin: 0 auto;
       padding: 2rem 1.25rem 3rem;
     }
     .session-header {
-      text-align: center;
-      padding: 1.5rem 0 1.25rem;
+      text-align: center; padding: 2rem 0 1.5rem;
     }
-    .session-icon {
-      font-size: 3rem;
-      display: block;
-      margin-bottom: 0.75rem;
-    }
+    .session-icon { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
     .session-title {
-      font-size: 1.65rem;
-      font-weight: 800;
-      color: var(--color-text);
-      letter-spacing: -0.01em;
-      margin-bottom: 0.4rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 1.7rem; font-weight: 800; color: #fff;
+      letter-spacing: -0.025em; margin-bottom: 0.4rem;
     }
-    .session-subtitle {
-      color: var(--color-text-muted);
-      font-size: 0.9rem;
-    }
+    .session-subtitle { color: var(--muted); font-size: 0.9rem; }
+
     .session-info-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
+      background: var(--glass);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.25rem;
       margin-bottom: 1.25rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
     }
-    .info-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
+    .info-item { display: flex; flex-direction: column; gap: 0.2rem; }
     .info-label {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--color-text-muted);
-      font-weight: 600;
+      font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); font-weight: 700;
     }
-    .info-value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--color-text);
-    }
+    .info-value { font-size: 1rem; font-weight: 700; color: #fff; }
+
     .spots-indicator {
       grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius);
-      font-weight: 700;
-      font-size: 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem; border-radius: var(--radius);
+      font-weight: 700; font-size: 0.95rem;
     }
-    .spots-green { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #10b981; }
-    .spots-yellow { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; }
-    .spots-red { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
-    .auth-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
+    .spots-green { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: #34d399; }
+    .spots-yellow { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); color: #fbbf24; }
+    .spots-red { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
+
+    .auth-card, .signup-card, .attendees-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
       margin-bottom: 1.25rem;
     }
-    .auth-card h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--color-text);
-      margin-bottom: 1rem;
+    .auth-card h2, .signup-card h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 1rem;
     }
     .unavailable-card {
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.3);
+      background: rgba(248,113,113,0.07);
+      border: 1px solid rgba(248,113,113,0.25);
       border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      text-align: center;
-      margin-bottom: 1.25rem;
+      padding: 1.75rem; text-align: center; margin-bottom: 1.25rem;
     }
-    .unavailable-card p {
-      color: #fca5a5;
-      font-size: 0.95rem;
-    }
-    .signup-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-    }
-    .signup-card h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--color-text);
-      margin-bottom: 1rem;
-    }
-    .attendees-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
+    .unavailable-card p { color: #fca5a5; font-size: 0.95rem; }
     .attendees-card h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
+      font-size: 0.8rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;
     }
-    .attendees-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    .attendees-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .attendee-chip {
-      background: var(--color-surface-2);
-      border: 1px solid var(--color-border);
+      background: var(--glass-b);
+      border: 1px solid var(--border);
       border-radius: 999px;
       padding: 0.3rem 0.85rem;
-      font-size: 0.875rem;
-      color: var(--color-text);
-      font-weight: 500;
+      font-size: 0.85rem; color: var(--text); font-weight: 500;
     }
     .session-notes {
-      background: rgba(14,165,233,0.07);
-      border: 1px solid rgba(14,165,233,0.2);
+      background: rgba(56,189,248,0.06);
+      border: 1px solid rgba(56,189,248,0.2);
       border-radius: var(--radius);
       padding: 0.75rem 1rem;
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      margin-bottom: 1.25rem;
+      font-size: 0.875rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6;
     }
     .session-footer {
-      text-align: center;
-      color: var(--color-text-muted);
-      font-size: 0.8rem;
-      margin-top: 1.5rem;
-      opacity: 0.6;
+      text-align: center; color: var(--muted); font-size: 0.8rem;
+      margin-top: 1.5rem; opacity: 0.5;
     }
-    .form-gap {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
+    .form-gap { display: flex; flex-direction: column; gap: 0.75rem; }
   </style>
 </head>
-<body class="session-body">
+<body>
   <div class="session-page">
 
     <!-- Header -->
@@ -187,14 +130,13 @@
       </div>
       <div class="info-item">
         <span class="info-label">📍 Location</span>
-        <span class="info-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
+        <span class="info-value" style="font-size:0.9rem;">{{ sess.location }}</span>
       </div>
       <div class="info-item">
         <span class="info-label">💰 Price</span>
-        <span class="info-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
+        <span class="info-value" style="font-size:0.9rem;">{{ sess.price }}</span>
       </div>
 
-      <!-- Spots indicator -->
       {% if spots_remaining <= 0 %}
       <div class="spots-indicator spots-red">
         <span>Spots full</span>
@@ -214,15 +156,13 @@
     </div>
 
     {% if sess.notes %}
-    <div class="session-notes">
-      ℹ️ {{ sess.notes }}
-    </div>
+    <div class="session-notes">ℹ️ {{ sess.notes }}</div>
     {% endif %}
 
     <!-- Not available -->
     {% if not sess.active or spots_remaining <= 0 %}
     <div class="unavailable-card">
-      <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">😔</p>
+      <p style="font-size:1.5rem; margin-bottom:0.5rem;">😔</p>
       {% if not sess.active %}
       <p>This session is not available right now.</p>
       {% else %}
@@ -242,7 +182,7 @@
           <label class="form-label">Access password</label>
           <input type="password" name="password" class="form-input" placeholder="Enter password" required autofocus />
         </div>
-        <button type="submit" class="btn btn-primary btn-full">Enter →</button>
+        <button type="submit" class="btn btn-primary btn-full" style="padding:0.65rem;">Enter →</button>
       </form>
     </div>
 
@@ -260,7 +200,7 @@
           <label class="form-label">WhatsApp (optional)</label>
           <input type="tel" name="whatsapp" class="form-input" placeholder="+84..." />
         </div>
-        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 0.25rem;">Sign me up! 🎉</button>
+        <button type="submit" class="btn btn-primary btn-full" style="padding:0.65rem; margin-top:0.25rem;">Sign me up! 🎉</button>
       </form>
     </div>
     {% endif %}
@@ -279,9 +219,7 @@
 
     {% endif %}
 
-    <div class="session-footer">
-      Cold Plunge Da Nang 🧊
-    </div>
+    <div class="session-footer">Cold Plunge Da Nang 🧊</div>
   </div>
 </body>
 </html>

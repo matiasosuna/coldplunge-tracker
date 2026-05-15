@@ -2,8 +2,9 @@
 {% block title %}Finances — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
-  <h1 class="page-title">Dashboard</h1>
+  <h1 class="page-title">Finances</h1>
 
   <!-- Month selector -->
   <form method="get" action="/" class="month-selector">
@@ -126,7 +127,7 @@
           </td>
           <td>{{ tx.category }}</td>
           <td>{{ tx.location.name if tx.location else '—' }}</td>
-          <td class="{% if tx.type == 'ingreso' %}text-income{% else %}text-expense{% endif %}">
+          <td class="{% if tx.type == 'ingreso' %}text-income{% else %}text-expense{% endif %} font-mono">
             {% if tx.type == 'gasto' %}-{% endif %}${{ "%.2f"|format(tx.amount) }}
           </td>
           <td class="text-muted">{{ tx.note or '—' }}</td>
@@ -140,6 +141,9 @@
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
 const incomeCategories = {{ income_categories | tojson }};
 const expenseCategories = {{ expense_categories | tojson }};
@@ -150,8 +154,7 @@ function updateCategories(tipoSelect, categoryId) {
   catSelect.innerHTML = '';
   cats.forEach(c => {
     const opt = document.createElement('option');
-    opt.value = c;
-    opt.textContent = c;
+    opt.value = c; opt.textContent = c;
     catSelect.appendChild(opt);
   });
 }

@@ -4,13 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Cold Plunge Tracker{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
+
   <nav class="navbar">
     <div class="nav-brand">
-      <span class="nav-icon">❄️</span>
-      <span class="nav-title">Cold Plunge</span>
+      <div class="nav-brand-icon">❄️</div>
+      Cold Plunge
     </div>
     <div class="nav-links">
       <a href="/dashboard" class="nav-link {% if request.url.path == '/dashboard' %}active{% endif %}">Home</a>
@@ -30,5 +34,7 @@
   <main class="main-content">
     {% block content %}{% endblock %}
   </main>
+
+  {% block scripts %}{% endblock %}
 </body>
 </html>

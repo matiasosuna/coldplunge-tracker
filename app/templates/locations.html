@@ -2,6 +2,7 @@
 {% block title %}Locations — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">Locations</h1>
   <button class="btn btn-primary" onclick="toggleForm('add-location-form')">+ New</button>
@@ -9,7 +10,7 @@
 
 <!-- Add location form -->
 <div id="add-location-form" class="section collapsible" style="display:none;">
-  <h2 class="section-title">New location</h2>
+  <h2 class="section-title" style="margin-bottom:1rem;">New location</h2>
   <form method="post" action="/ubicaciones/nueva" class="quick-form">
     <div class="quick-form-grid">
       <div class="form-group">
@@ -40,7 +41,7 @@
             <p class="location-address">{{ stat.location.address }}</p>
           {% endif %}
           {% if not stat.location.active %}
-            <span class="badge badge-inactive">Inactive</span>
+            <span class="badge badge-inactive" style="margin-top:0.25rem;">Inactive</span>
           {% endif %}
         </div>
         <div class="location-actions">
@@ -96,12 +97,14 @@
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
 function toggleForm(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
-
 function toggleEditForm(id) {
   const el = document.getElementById(id);
   el.style.display = el.style.display === 'none' ? 'block' : 'none';

@@ -2,6 +2,7 @@
 {% block title %}Transactions — Cold Plunge Tracker{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">Transactions</h1>
   <button class="btn btn-primary" onclick="toggleForm('add-form')">+ New</button>
@@ -9,7 +10,7 @@
 
 <!-- Add transaction form (hidden by default) -->
 <div id="add-form" class="section collapsible" style="display:none;">
-  <h2 class="section-title">New transaction</h2>
+  <h2 class="section-title" style="margin-bottom:1rem;">New transaction</h2>
   <form method="post" action="/transacciones/nueva" class="quick-form">
     <input type="hidden" name="redirect_to" value="/transacciones" />
     <div class="quick-form-grid">
@@ -165,6 +166,9 @@
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
 const incomeCategories = {{ income_categories | tojson }};
 const expenseCategories = {{ expense_categories | tojson }};
@@ -175,8 +179,7 @@ function updateCategories(tipoSelect, categoryId) {
   catSelect.innerHTML = '';
   cats.forEach(c => {
     const opt = document.createElement('option');
-    opt.value = c;
-    opt.textContent = c;
+    opt.value = c; opt.textContent = c;
     catSelect.appendChild(opt);
   });
 }

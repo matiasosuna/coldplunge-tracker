@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-
 {% block title %}Sign-ups — {{ sess.title }}{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
-  <h1 class="page-title">🧊 Sign-ups — {{ sess.title }}</h1>
+  <h1 class="page-title">🧊 {{ sess.title }}</h1>
   <a href="/admin/sessions" class="btn btn-secondary btn-sm">← Back to sessions</a>
 </div>
 
@@ -18,7 +18,7 @@
     <span class="badge badge-inactive">Inactive</span>
     {% endif %}
   </div>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
     <div class="stat-item">
       <span class="stat-label">Date</span>
       <span class="stat-value">{{ sess.date.strftime('%d/%m/%Y') }}</span>
@@ -29,28 +29,28 @@
     </div>
     <div class="stat-item">
       <span class="stat-label">Location</span>
-      <span class="stat-value" style="font-size: 0.9rem;">{{ sess.location }}</span>
+      <span class="stat-value" style="font-size:0.9rem;">{{ sess.location }}</span>
     </div>
     <div class="stat-item">
       <span class="stat-label">Price</span>
-      <span class="stat-value" style="font-size: 0.9rem;">{{ sess.price }}</span>
+      <span class="stat-value" style="font-size:0.9rem;">{{ sess.price }}</span>
     </div>
     <div class="stat-item">
       <span class="stat-label">Spots</span>
       {% set signup_count = sess.signups | length %}
       {% set spots_remaining = sess.max_spots - signup_count %}
       {% if spots_remaining <= 0 %}
-      <span class="stat-value" style="color: var(--color-expense);">{{ signup_count }} / {{ sess.max_spots }} — Full</span>
+      <span class="stat-value" style="color:#f87171;">{{ signup_count }} / {{ sess.max_spots }} — Full</span>
       {% elif spots_remaining <= 3 %}
-      <span class="stat-value" style="color: #f59e0b;">{{ signup_count }} / {{ sess.max_spots }}</span>
+      <span class="stat-value" style="color:#fbbf24;">{{ signup_count }} / {{ sess.max_spots }}</span>
       {% else %}
-      <span class="stat-value" style="color: var(--color-income);">{{ signup_count }} / {{ sess.max_spots }}</span>
+      <span class="stat-value" style="color:#34d399;">{{ signup_count }} / {{ sess.max_spots }}</span>
       {% endif %}
     </div>
     {% if sess.notes %}
     <div class="stat-item" style="grid-column: 1 / -1;">
       <span class="stat-label">Notes</span>
-      <span class="stat-value" style="font-size: 0.9rem; font-weight: 400; color: var(--color-text-muted);">{{ sess.notes }}</span>
+      <span class="stat-value" style="font-size:0.875rem; font-weight:400; color:var(--muted);">{{ sess.notes }}</span>
     </div>
     {% endif %}
   </div>
@@ -81,7 +81,7 @@
           <td>{{ signup.name }}</td>
           <td>
             {% if signup.whatsapp %}
-            <a href="https://wa.me/{{ signup.whatsapp | replace('+', '') | replace(' ', '') }}" target="_blank" style="color: #25D366;">{{ signup.whatsapp }}</a>
+            <a href="https://wa.me/{{ signup.whatsapp | replace('+', '') | replace(' ', '') }}" target="_blank" style="color: #34d399;">{{ signup.whatsapp }}</a>
             {% else %}
             <span class="text-muted">—</span>
             {% endif %}
@@ -102,4 +102,5 @@
   <p class="empty-state">Nobody has signed up yet.</p>
   {% endif %}
 </div>
+
 {% endblock %}

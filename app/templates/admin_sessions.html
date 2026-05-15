@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-
 {% block title %}Admin — Sessions{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">🧊 Sessions</h1>
 </div>
@@ -84,11 +84,11 @@
           <td>{{ sess.location }}</td>
           <td>
             {% if spots_remaining <= 0 %}
-            <span style="color: var(--color-expense); font-weight: 600;">{{ signup_count }} / {{ sess.max_spots }} — Full</span>
+            <span style="color:#f87171; font-weight:700;">{{ signup_count }} / {{ sess.max_spots }} — Full</span>
             {% elif spots_remaining <= 3 %}
-            <span style="color: #f59e0b; font-weight: 600;">{{ signup_count }} / {{ sess.max_spots }}</span>
+            <span style="color:#fbbf24; font-weight:700;">{{ signup_count }} / {{ sess.max_spots }}</span>
             {% else %}
-            <span style="color: var(--color-income); font-weight: 600;">{{ signup_count }} / {{ sess.max_spots }}</span>
+            <span style="color:#34d399; font-weight:700;">{{ signup_count }} / {{ sess.max_spots }}</span>
             {% endif %}
           </td>
           <td>
@@ -99,7 +99,7 @@
             {% endif %}
           </td>
           <td class="actions-cell">
-            <a href="/admin/sessions/{{ sess.id }}/signups" class="btn btn-ghost btn-sm">View sign-ups</a>
+            <a href="/admin/sessions/{{ sess.id }}/signups" class="btn btn-ghost btn-sm">Sign-ups</a>
             <a href="/sesion/{{ sess.id }}" target="_blank" class="btn btn-ghost btn-sm">Public ↗</a>
             <form method="post" action="/admin/sessions/{{ sess.id }}/toggle" style="display:inline;">
               <button type="submit" class="btn btn-ghost btn-sm">
@@ -120,4 +120,5 @@
   <p class="empty-state">No sessions yet. Create the first one above.</p>
   {% endif %}
 </div>
+
 {% endblock %}

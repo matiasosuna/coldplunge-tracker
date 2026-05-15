@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-
 {% block title %}Tasks — Cold Plunge{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">📋 Tasks</h1>
 </div>
@@ -113,15 +113,9 @@
   {% endif %}
 </div>
 
-<style>
-  .todo-resolution {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-muted, #8899aa);
-    font-style: italic;
-    margin-top: 0.15rem;
-  }
-</style>
+{% endblock %}
+
+{% block scripts %}
 <script>
   function toggleResolution(id) {
     document.getElementById('resolve-form-' + id).style.display = 'block';

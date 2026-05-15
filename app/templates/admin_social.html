@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-
 {% block title %}Admin — Social Page{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
   <h1 class="page-title">🌐 Social Page</h1>
-  <div style="display:flex;gap:0.5rem;">
+  <div style="display:flex; gap:0.5rem;">
     <a href="/social" target="_blank" class="btn btn-secondary btn-sm">View /social ↗</a>
     <a href="/pay" target="_blank" class="btn btn-secondary btn-sm">View /pay ↗</a>
   </div>
@@ -51,8 +51,8 @@
       {% if social_links %}
       <div style="margin-bottom:1rem;">
         {% for link in social_links %}
-        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--color-border);">
-          <span style="flex:1;font-size:0.9rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0; border-bottom:1px solid var(--border);">
+          <span style="flex:1; font-size:0.875rem;">
             {% if link.platform == "instagram" %}📸
             {% elif link.platform == "tiktok" %}🎵
             {% elif link.platform == "whatsapp" %}💬
@@ -62,7 +62,7 @@
             {% else %}🔗
             {% endif %}
             <strong>{{ link.label }}</strong>
-            {% if not link.active %}<span style="color:var(--color-text-muted);font-size:0.75rem;"> (inactive)</span>{% endif %}
+            {% if not link.active %}<span style="color:var(--muted); font-size:0.75rem;"> (inactive)</span>{% endif %}
           </span>
           <form method="post" action="/admin/social/links/{{ link.id }}/toggle" style="display:inline;">
             <button type="submit" class="btn btn-ghost btn-sm">{% if link.active %}⏸{% else %}▶{% endif %}</button>
@@ -76,7 +76,7 @@
       {% endif %}
 
       <form method="post" action="/admin/social/links/add" onsubmit="reloadPreview()">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:0.5rem;">
           <div class="form-group">
             <label class="form-label">Platform</label>
             <select name="platform" class="form-input" required>
@@ -108,15 +108,15 @@
       <div class="section-header">
         <h2 class="section-title">💝 Payment / donation links</h2>
       </div>
-      <p style="font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem;">These appear as payment buttons on <code>/social</code> and <code>/pay</code>. If there are more than one, they are shown as a dropdown menu.</p>
+      <p style="font-size:0.8rem; color:var(--muted); margin-bottom:1rem; line-height:1.6;">These appear as payment buttons on <code style="background:var(--glass-b); padding:0.1rem 0.35rem; border-radius:4px;">/social</code> and <code style="background:var(--glass-b); padding:0.1rem 0.35rem; border-radius:4px;">/pay</code>. If there are more than one, they are shown as a dropdown menu.</p>
 
       {% set donation_links = links | selectattr("is_donation", "equalto", true) | list %}
       {% if donation_links %}
       <div style="margin-bottom:1rem;">
         {% for link in donation_links %}
-        <div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--color-border);">
-          <span style="flex:1;font-size:0.9rem;">💝 <strong>{{ link.label }}</strong>
-            {% if not link.active %}<span style="color:var(--color-text-muted);font-size:0.75rem;"> (inactive)</span>{% endif %}
+        <div style="display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0; border-bottom:1px solid var(--border);">
+          <span style="flex:1; font-size:0.875rem;">💝 <strong>{{ link.label }}</strong>
+            {% if not link.active %}<span style="color:var(--muted); font-size:0.75rem;"> (inactive)</span>{% endif %}
           </span>
           <form method="post" action="/admin/social/links/{{ link.id }}/toggle" style="display:inline;">
             <button type="submit" class="btn btn-ghost btn-sm">{% if link.active %}⏸{% else %}▶{% endif %}</button>
@@ -128,12 +128,12 @@
         {% endfor %}
       </div>
       {% else %}
-      <p style="color:var(--color-text-muted);font-size:0.85rem;margin-bottom:1rem;">No payment links yet.</p>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:1rem;">No payment links yet.</p>
       {% endif %}
 
       <form method="post" action="/admin/social/links/add" onsubmit="reloadPreview()">
         <input type="hidden" name="is_donation" value="on" />
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:0.5rem;">
           <div class="form-group">
             <label class="form-label">Label</label>
             <input type="text" name="label" class="form-input" placeholder="Wise, USDT, etc." required />
@@ -167,17 +167,17 @@
         {% endfor %}
       </div>
       {% else %}
-      <p style="color:var(--color-text-muted);font-size:0.85rem;margin-bottom:1rem;">No photos yet.</p>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:1rem;">No photos yet.</p>
       {% endif %}
 
       <form method="post" action="/admin/social/photos/add" onsubmit="reloadPreview()">
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:0.5rem; margin-bottom:0.5rem;">
           <div class="form-group">
             <label class="form-label">Image URL</label>
             <input type="url" name="image_url" class="form-input" placeholder="https://..." required />
           </div>
           <div class="form-group">
-            <label class="form-label">Caption (opcional)</label>
+            <label class="form-label">Caption (optional)</label>
             <input type="text" name="caption" class="form-input" placeholder="Group session..." />
           </div>
         </div>
@@ -190,7 +190,7 @@
   <!-- RIGHT: preview iframe -->
   <div class="social-admin-preview">
     <div class="social-preview-header">
-      <span style="font-size:0.8rem;color:var(--color-text-muted);">Preview — /social</span>
+      <span style="font-size:0.8rem; color:var(--muted);">Preview — /social</span>
       <button onclick="reloadPreview()" class="btn btn-ghost btn-sm">⟳ Refresh</button>
     </div>
     <div class="social-preview-frame-wrapper">
@@ -200,6 +200,9 @@
 
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
   function scalePreview() {
     const wrapper = document.querySelector('.social-preview-frame-wrapper');
