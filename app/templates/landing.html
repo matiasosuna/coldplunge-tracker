@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Guided ice bath sessions in Da Nang, Vietnam. Boost recovery, sharpen your mind, build resilience." />
+  <meta name="description" content="Guided ice bath sessions in Da Nang, Vietnam. Recover faster, think sharper." />
   <title>Ice Bath Recovery Da Nang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,271 +11,215 @@
 </head>
 <body>
 
-<!-- ── NAV ─────────────────────────────────── -->
 <nav class="site-nav">
   <div class="nav-brand">
     <div class="nav-brand-icon">❄️</div>
-    Ice Bath Recovery <span style="color:var(--muted);font-weight:400;margin-left:0.25rem;">Da Nang</span>
+    Ice Bath Recovery Da Nang
   </div>
-  <div class="nav-links">
-    <a href="#benefits">Benefits</a>
-    <a href="#how">How it works</a>
-    <a href="#events">Sessions</a>
-    <a href="#connect">Connect</a>
-    <a href="#events" class="nav-cta">Book a session</a>
+  <div class="nav-tabs" role="tablist">
+    <button class="nav-tab active" onclick="showTab('sessions')" role="tab">Sessions</button>
+    <button class="nav-tab" onclick="showTab('connect')" role="tab">Connect</button>
   </div>
+  <a href="#sessions-list" class="nav-cta" onclick="showTab('sessions')">
+    Book now
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
 </nav>
 
-<!-- ── HERO ─────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">
       <div class="hero-eyebrow-dot"></div>
-      Da Nang, Vietnam &nbsp;·&nbsp; Guided Sessions
+      Da Nang, Vietnam
     </div>
-
-    <h1>
-      The cold is<br>
-      <span class="gradient-word">the practice.</span>
-    </h1>
-
+    <h1>The cold is<br><span class="gradient-word">the practice.</span></h1>
     <p class="hero-sub">
       Guided ice bath sessions on the shores of Da Nang.
-      Reduce inflammation, sharpen focus, and build the mental resilience that carries over into everything else.
+      Recover faster, think sharper, feel more alive.
     </p>
-
     <div class="hero-actions">
-      <a href="#events" class="btn-ice">
+      <button class="btn-ice" onclick="showTab('sessions'); document.getElementById('sessions-list').scrollIntoView({behavior:'smooth'})">
         View upcoming sessions
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#benefits" class="btn-ghost">
-        Learn more
-      </a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">2<span>°C</span></div>
-        <div class="hero-stat-label">Water temp</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">3<span>min</span></div>
-        <div class="hero-stat-label">Average immersion</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">300<span>%</span></div>
-        <div class="hero-stat-label">Norepinephrine boost</div>
-      </div>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-outline" onclick="showTab('connect')">Find us online</button>
     </div>
   </div>
 </section>
 
-<!-- ── BENEFITS ─────────────────────────────── -->
-<section class="s" id="benefits">
-  <div class="s-inner">
-    <div class="s-label">Why cold exposure</div>
-    <h2 class="s-title">What happens when<br>you enter the ice</h2>
-    <p class="s-desc">Cold immersion is one of the most researched wellness tools available. Here's what the science shows.</p>
+<!-- TAB CONTENT -->
+<div class="tab-body">
 
-    <div class="benefits-grid">
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">⚡</div>
-        <h3>Faster Muscle Recovery</h3>
-        <p>Cold constricts blood vessels and reduces metabolic waste build-up, cutting soreness and helping you train harder, more often.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">🧠</div>
-        <h3>Mental Clarity</h3>
-        <p>A single immersion triggers up to a 300% spike in norepinephrine — the neurotransmitter behind focus, mood, and alertness.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">🔥</div>
-        <h3>Metabolic Activation</h3>
-        <p>Cold activates brown adipose tissue, increasing caloric expenditure and improving insulin sensitivity over time.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">🛡️</div>
-        <h3>Immune Resilience</h3>
-        <p>Regular cold exposure has been associated with higher white blood cell counts and reduced sick days in multiple studies.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">🧘</div>
-        <h3>Stress Hardening</h3>
-        <p>The cold teaches controlled breathing and calm under pressure — a skill that transfers directly to everyday life.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon-wrap">😴</div>
-        <h3>Deeper Sleep</h3>
-        <p>Post-immersion temperature rebound signals the brain for sleep. Most people report noticeably better rest the same night.</p>
-      </div>
+  <!-- SESSIONS -->
+  <div class="tab-pane active" id="tab-sessions">
+    <div class="sessions-header">
+      <div class="tab-label">Upcoming sessions</div>
+      <h2 class="tab-title">Join the next plunge</h2>
+      <p class="tab-desc">Small groups. Fully guided. No experience needed.</p>
     </div>
-  </div>
-</section>
 
-<!-- ── HOW IT WORKS ──────────────────────────── -->
-<section class="s s-alt" id="how">
-  <div class="s-inner">
-    <div class="s-label">The process</div>
-    <h2 class="s-title">Your session,<br>step by step</h2>
-    <div class="steps-wrap">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h3>Reserve your spot</h3>
-        <p>Sessions are intentionally small. Book online in advance — this isn't the kind of experience you want to miss because it filled up.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h3>Breathwork warm-up</h3>
-        <p>We open with guided breathing to regulate your nervous system and set the right mindset before you touch the water.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h3>Guided immersion</h3>
-        <p>Enter the ice at your own pace with a facilitator present. No pressure. The only rule is you stay present.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <h3>Natural warm-up</h3>
-        <p>No hot showers. We let the body do the work — and debrief as a group while the warmth comes back on its own.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── EVENTS ────────────────────────────────── -->
-<section class="s" id="events">
-  <div class="s-inner">
-    <div class="s-label">Upcoming sessions</div>
-    <h2 class="s-title">Join the next plunge</h2>
-    <p class="s-desc">All sessions are beginner-friendly and fully guided. No experience or special gear needed.</p>
-
-    <div class="events-grid">
+    <div class="session-list" id="sessions-list">
       {% if upcoming %}
         {% for sess in upcoming %}
         {% set spots_left = sess.max_spots - sess.signups|length %}
-        <div class="event-card">
-          <div class="event-tag">
-            📅 {{ sess.date.strftime('%B %d, %Y') }}
+        <div class="session-row">
+          <div class="session-row-left">
+            <span class="session-date">{{ sess.date.strftime('%A, %B %d · %Y') }}</span>
+            <span class="session-name">{{ sess.title }}</span>
+            <div class="session-meta">
+              <span>
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                {{ sess.time }}
+              </span>
+              <span>
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                {{ sess.location }}
+              </span>
+              <span>
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                {{ sess.price }}
+              </span>
+            </div>
           </div>
-          <h3>{{ sess.title }}</h3>
-          <div class="event-details">
-            <div class="event-detail">
-              <span class="event-detail-icon">🕐</span> {{ sess.time }}
-            </div>
-            <div class="event-detail">
-              <span class="event-detail-icon">📍</span> {{ sess.location }}
-            </div>
-            <div class="event-detail">
-              <span class="event-detail-icon">💵</span> {{ sess.price }} per person
-            </div>
-          </div>
-          <div class="event-footer">
-            <span class="spots-indicator {% if spots_left == 0 %}full{% elif spots_left <= 3 %}few{% endif %}">
-              {% if spots_left == 0 %}
-                Fully booked
-              {% elif spots_left == 1 %}
-                ⚠️ Last spot
-              {% elif spots_left <= 3 %}
-                ⚠️ {{ spots_left }} spots left
-              {% else %}
-                {{ spots_left }} spots available
+          <div class="session-row-right">
+            <span class="spots-pill {% if spots_left == 0 %}full{% elif spots_left <= 3 %}few{% endif %}">
+              {% if spots_left == 0 %}Fully booked
+              {% elif spots_left == 1 %}Last spot
+              {% elif spots_left <= 3 %}{{ spots_left }} spots left
+              {% else %}{{ spots_left }} spots
               {% endif %}
             </span>
             {% if spots_left > 0 %}
-            <a href="/sesion/{{ sess.id }}" class="btn-book">
-              Reserve →
-            </a>
+            <a href="/sesion/{{ sess.id }}" class="btn-reserve">Reserve →</a>
             {% endif %}
           </div>
         </div>
         {% endfor %}
       {% else %}
-      <div class="no-events">
-        <p style="font-size:2rem;margin-bottom:1rem;">🧊</p>
-        <p>No sessions scheduled right now.<br>Follow us on Instagram to hear first when the next one drops.</p>
+      <div class="no-sessions">
+        <p>No upcoming sessions right now.<br>Follow us on Instagram to be the first to know.</p>
       </div>
       {% endif %}
     </div>
   </div>
-</section>
 
-<!-- ── GALLERY ───────────────────────────────── -->
-<section class="s s-alt" id="gallery">
-  <div class="s-inner">
-    <div class="s-label">In the water</div>
-    <h2 class="s-title">What to expect</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item span-2">Coming soon</div>
-      <div class="gallery-item">Photo</div>
-      <div class="gallery-item">Photo</div>
-      <div class="gallery-item span-col">Photo</div>
-      <div class="gallery-item">Photo</div>
-      <div class="gallery-item">Photo</div>
+  <!-- CONNECT -->
+  <div class="tab-pane" id="tab-connect">
+    <div class="sessions-header">
+      <div class="tab-label">Find us</div>
+      <h2 class="tab-title">Stay in the loop</h2>
+      <p class="tab-desc">Session drops, cold exposure tips, and community updates.</p>
     </div>
-  </div>
-</section>
 
-<!-- ── CONNECT ───────────────────────────────── -->
-<section class="s" id="connect">
-  <div class="s-inner">
-    <div class="s-label">Stay connected</div>
-    <h2 class="s-title">Find us online</h2>
-    <p class="s-desc">Follow for session announcements, cold exposure tips, and dispatches from the community.</p>
-
-    <div class="socials-grid">
+    <div class="connect-wrap">
       {% if links %}
         {% for link in links %}
-        <a href="{{ link.url }}" target="_blank" rel="noopener" class="social-card">
-          <div class="social-icon">
-            {% if link.platform == 'instagram' %}📸
-            {% elif link.platform == 'whatsapp' %}💬
-            {% elif link.platform == 'tiktok' %}🎵
-            {% elif link.platform == 'youtube' %}▶️
-            {% else %}🔗{% endif %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="social-link-row">
+          <div class="social-link-left">
+            <div class="social-svg">
+              {% if link.platform == 'instagram' %}
+              <!-- Instagram -->
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#f09433"/>
+                  <stop offset="25%" style="stop-color:#e6683c"/>
+                  <stop offset="50%" style="stop-color:#dc2743"/>
+                  <stop offset="75%" style="stop-color:#cc2366"/>
+                  <stop offset="100%" style="stop-color:#bc1888"/>
+                </linearGradient></defs>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="url(#ig)"/>
+                <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+                <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+              </svg>
+              {% elif link.platform == 'whatsapp' %}
+              <!-- WhatsApp -->
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#25D366"/>
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/>
+              </svg>
+              {% elif link.platform == 'tiktok' %}
+              <!-- TikTok -->
+              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#000"/>
+                <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 015.82 9.5v6.82A4.278 4.278 0 0010.1 20.6a4.278 4.278 0 004.28-4.28V9.5a4.278 4.278 0 004.28 4.28v-2.14a2.14 2.14 0 01-2.14-2.14V5.82h-2.14" fill="white"/>
+              </svg>
+              {% elif link.platform == 'youtube' %}
+              <!-- YouTube -->
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#FF0000"/>
+                <polygon points="10,8.5 10,15.5 16,12" fill="white"/>
+              </svg>
+              {% else %}
+              <!-- Generic link -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="9"/><path d="M12 3a15.3 15.3 0 010 18M3 12h18"/>
+              </svg>
+              {% endif %}
+            </div>
+            <div class="social-link-text">
+              <strong>{{ link.label }}</strong>
+              <span>{{ link.platform | capitalize }}</span>
+            </div>
           </div>
-          <div class="social-info">
-            <strong>{{ link.label }}</strong>
-            <span>{{ link.platform | capitalize }}</span>
-          </div>
+          <span class="social-link-arrow">→</span>
         </a>
         {% endfor %}
       {% else %}
-        <div class="social-card" style="opacity:0.5;pointer-events:none;">
-          <div class="social-icon">📸</div>
-          <div class="social-info"><strong>Instagram</strong><span>Coming soon</span></div>
+        <div class="social-link-row" style="opacity:0.4;pointer-events:none;">
+          <div class="social-link-left">
+            <div class="social-svg">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="ig2" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#f09433"/>
+                  <stop offset="100%" style="stop-color:#bc1888"/>
+                </linearGradient></defs>
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig2)"/>
+                <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+                <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+              </svg>
+            </div>
+            <div class="social-link-text"><strong>Instagram</strong><span>Coming soon</span></div>
+          </div>
+          <span class="social-link-arrow">→</span>
         </div>
-        <div class="social-card" style="opacity:0.5;pointer-events:none;">
-          <div class="social-icon">💬</div>
-          <div class="social-info"><strong>WhatsApp Group</strong><span>Coming soon</span></div>
+        <div class="social-link-row" style="opacity:0.4;pointer-events:none;">
+          <div class="social-link-left">
+            <div class="social-svg">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#25D366"/>
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="white"/>
+              </svg>
+            </div>
+            <div class="social-link-text"><strong>WhatsApp</strong><span>Coming soon</span></div>
+          </div>
+          <span class="social-link-arrow">→</span>
         </div>
       {% endif %}
     </div>
   </div>
-</section>
 
-<!-- ── CTA ──────────────────────────────────── -->
-<section class="cta">
-  <div class="cta-box">
-    <h2>Ready to take the plunge?</h2>
-    <p>
-      Most people think about it. A few actually do it.<br>
-      Come be one of them.
-    </p>
-    <a href="#events" class="btn-ice">See available sessions →</a>
-  </div>
-</section>
+</div><!-- /tab-body -->
 
-<!-- ── FOOTER ────────────────────────────────── -->
 <footer class="site-footer">
   <div class="footer-brand">❄️ Ice Bath Recovery Da Nang · {{ today.year }}</div>
-  <div class="footer-links">
-    <a href="#benefits">Benefits</a>
-    <a href="#events">Sessions</a>
-    <a href="#connect">Connect</a>
-  </div>
 </footer>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const map = { sessions: 0, connect: 1 };
+    if (tabs[map[name]]) tabs[map[name]].classList.add('active');
+  }
+
+  // activate tab from URL hash
+  const hash = location.hash.replace('#','');
+  if (hash === 'connect') showTab('connect');
+</script>
 
 </body>
 </html>
